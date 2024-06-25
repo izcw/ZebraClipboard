@@ -1,0 +1,28 @@
+@import './theme.scss';
+@import './public.scss';
+/* 公共变量 */
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+a {
+    text-decoration: none;
+    color: #0B7FE9;
+}
+
+html,
+body,
+#app,
+.main-box {
+    width: 100%;
+    height: 100%;
+}
+
+h1,h2,h3,h4,h5,h6{
+    font-family: open sans, Helvetica, Arial, sans-serif;
+    font-weight: 600;
+    color: var(--color-numeral-333);
+}

@@ -1,0 +1,9 @@
+### VS Code ###
+.vscode/
+node_modules/
+dist/
+
+### Mac OS ###
+.DS_Store
+
+
