@@ -20,7 +20,6 @@
     "@vitejs/plugin-vue": "^5.0.4",
     "boxicons": "^2.1.4",
     "echarts": "^5.5.0",
-    "echarts-gl": "^2.0.9",
     "sass": "^1.77.6",
     "vite": "^5.2.8"
   }

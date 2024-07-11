@@ -22,7 +22,7 @@
 }
 // 组件
 .component {
-    border-radius: 12px;
+    border-radius: 10px;
     backdrop-filter: blur(20px);
     background: var(--component-background);
     box-shadow: var(--component-box-shadow);
@@ -30,7 +30,7 @@
 
 // hr线
 hr {
-    margin: 12px 0;
+    margin: 20px 0;
     border: none;
     height: 1px;
     background-color: #f5f5f5;

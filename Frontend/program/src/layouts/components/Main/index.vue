@@ -1,5 +1,5 @@
 <template>
-    <div class="layout-padding-large">
+    <div class="layout-padding-small">
         <ToptoolIndex :title="title">
             <template #title>
                 {{ title }}

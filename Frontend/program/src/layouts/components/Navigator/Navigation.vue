@@ -1,53 +1,35 @@
 <template>
     <div>
-        <div class="nav-box">
-            <h5>主页</h5>
-            <router-link :to="{ name: 'index', params: { username: 'erina' } }">
-                <div class="item active">
-                    <div class="nav-icon">
-                        <box-icon name='diamond'
-                            :color="true ? 'var(--component-icon-color-reverse)' : 'var(--component-icon-color-default)'"></box-icon>
-                    </div>
-                    <h5>仪表盘</h5>
-                </div>
-            </router-link>
-            <router-link :to="{ name: 'about1', params: { username: 'erina' } }">
-                <div class="item">
-                    <div class="nav-icon">
-                        <box-icon name='diamond'
-                            :color="false ? 'var(--component-icon-color-reverse)' : 'var(--component-icon-color-default)'"></box-icon>
-                    </div>
-                    <h5>仪表盘</h5>
-                </div>
-            </router-link>
+        <div class="nav-box" v-for="(item, index) in RouteData" :key="index">
             <hr>
-        </div>
-        <div class="nav-box">
-            <h5>我的</h5>
-            <router-link :to="{ name: 'about1', params: { username: 'erina' } }">
-                <div class="item">
+            <h5>{{ item.meta.title }}</h5>
+            <!-- <h5>{{ item.role }}</h5> -->
+            <router-link v-for="(item2,index2) in item.children" :key="index2" :to="{ name: item2.name}">
+                <div class="item" :class="{active:route.name == item2.name }">
                     <div class="nav-icon">
-                        <box-icon name='diamond'
-                            :color="false ? 'var(--component-icon-color-reverse)' : 'var(--component-icon-color-default)'"></box-icon>
+                        <box-icon :name="item2.meta.icon"
+                            :color="route.name == item2.name ? 'var(--component-icon-color-reverse)' : 'var(--component-icon-color-default)'"></box-icon>
                     </div>
-                    <h5>个人中心</h5>
+                    <h5>{{item2.meta.title}}</h5>
                 </div>
             </router-link>
-            <router-link :to="{ name: 'about2', params: { username: 'erina' } }">
-                <div class="item">
-                    <div class="nav-icon">
-                        <box-icon name='diamond'
-                            :color="false ? 'var(--component-icon-color-reverse)' : 'var(--component-icon-color-default)'"></box-icon>
-                    </div>
-                    <h5>仪表盘仪表盘仪表盘仪表盘</h5>
-                </div>
-            </router-link>
-            <hr>
         </div>
     </div>
 </template>
 <script setup>
-import { ref } from "vue";
+import { ref } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
+
+
+// 获取路由对象和当前路由对象
+const router = useRouter();
+const route = useRoute();
+
+let RouteData = router.options.routes;
+let RouteCurrent = route;
+
+console.log(RouteData, "8888");
+console.log(RouteCurrent, "当前", route.path);
 </script>
 <style scoped lang='scss'>
 .nav-box {

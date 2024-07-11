@@ -44,7 +44,7 @@
             </el-col>
             <el-col :span="12">
                 <div class="Occupying-box  layout-padding-small layout-margin-bottom-large">
-                    <EchartsEarth></EchartsEarth>
+                    666666
                 </div>
                 <CardIndex>
                     <template #title>
@@ -72,7 +72,6 @@ import CardIndex from "@/components/Card/index.vue";
 import CardSmall from "@/components/Card/CardSmall.vue";
 import EchartsVisitorAnalysis from "@/components/Echarts/VisitorAnalysis.vue";
 import EchartsUsage from "@/components/Echarts/Usage.vue";
-import EchartsEarth from "@/components/Echarts/Earth.vue";
 
 </script>
 

@@ -8,7 +8,7 @@ $themes: (
         //组件背景
         component-background: rgba(255, 255, 255, 0.8),
         // 组件阴影
-        component-box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05),
+        component-box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1),
         component-icon-color: #141414,
         component-icon-color-default:#BFBFBF,
         component-icon-color-active:#0B7FE9,
@@ -19,9 +19,9 @@ $themes: (
         color-numeral-999:#999,
     ),
     dark: (
-        background: #0c0e12,
+        background: #0F172A,
         text: #ffffff,
-        component-background: rgba(29, 30, 38, 0.8),
+        component-background: #233042,
         component-box-shadow: 0 -1px 2px rgb(255 255 255 / 45%),
         component-icon-color: #ffffff,
         component-icon-color-default:#BFBFBF,
