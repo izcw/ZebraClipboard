@@ -3,3 +3,4 @@ layout: home
 ---
 
 <ClipboardLayoutQuery/>
+<TestsIndex/>

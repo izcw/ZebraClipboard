@@ -1,7 +1,4 @@
 import {
-  isVue2
-} from "./chunk-IDX75QLE.js";
-import {
   arrow_down_default,
   arrow_left_default,
   arrow_right_default,
@@ -45,6 +42,9 @@ import {
   zoom_in_default,
   zoom_out_default
 } from "./chunk-OUHRWIIQ.js";
+import {
+  isVue2
+} from "./chunk-IDX75QLE.js";
 import {
   Comment,
   Fragment,

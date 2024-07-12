@@ -1,58 +1,64 @@
 {
-  "hash": "2ecc690d",
-  "configHash": "39c080a9",
-  "lockfileHash": "c4ce56c1",
-  "browserHash": "a85d065f",
+  "hash": "fa512791",
+  "configHash": "6f8fe218",
+  "lockfileHash": "2c074765",
+  "browserHash": "4ecdc2fa",
   "optimized": {
     "vue": {
       "src": "../../../node_modules/.pnpm/vue@3.4.29/node_modules/vue/dist/vue.runtime.esm-bundler.js",
       "file": "vue.js",
-      "fileHash": "49b11c71",
+      "fileHash": "9525af07",
       "needsInterop": false
     },
     "vitepress > @vue/devtools-api": {
       "src": "../../../node_modules/.pnpm/@vue+devtools-api@7.3.0_vue@3.4.29/node_modules/@vue/devtools-api/dist/index.js",
       "file": "vitepress___@vue_devtools-api.js",
-      "fileHash": "f4bd3d2c",
+      "fileHash": "462bd70b",
       "needsInterop": false
     },
     "vitepress > @vueuse/core": {
       "src": "../../../node_modules/.pnpm/@vueuse+core@10.11.0_vue@3.4.29/node_modules/@vueuse/core/index.mjs",
       "file": "vitepress___@vueuse_core.js",
-      "fileHash": "dc488620",
+      "fileHash": "e2ee49f9",
       "needsInterop": false
     },
     "element-plus": {
       "src": "../../../node_modules/.pnpm/element-plus@2.7.5_vue@3.4.29/node_modules/element-plus/es/index.mjs",
       "file": "element-plus.js",
-      "fileHash": "dbea1fcd",
+      "fileHash": "2beecc8e",
       "needsInterop": false
     },
     "@element-plus/icons-vue": {
       "src": "../../../node_modules/.pnpm/@element-plus+icons-vue@2.3.1_vue@3.4.29/node_modules/@element-plus/icons-vue/dist/index.js",
       "file": "@element-plus_icons-vue.js",
-      "fileHash": "02e58dc6",
-      "needsInterop": false
-    },
-    "vue-qrcode": {
-      "src": "../../../node_modules/.pnpm/vue-qrcode@2.2.2_qrcode@1.5.3_vue@3.4.29/node_modules/vue-qrcode/lib/index.esm.mjs",
-      "file": "vue-qrcode.js",
-      "fileHash": "00735950",
+      "fileHash": "8d6031be",
       "needsInterop": false
     },
     "@wangeditor/editor-for-vue": {
       "src": "../../../node_modules/.pnpm/@wangeditor+editor-for-vue@5.1.12_@wangeditor+editor@5.1.23_vue@3.4.29/node_modules/@wangeditor/editor-for-vue/dist/index.esm.js",
       "file": "@wangeditor_editor-for-vue.js",
-      "fileHash": "9a89908c",
+      "fileHash": "7e694310",
+      "needsInterop": false
+    },
+    "vue-qrcode": {
+      "src": "../../../node_modules/.pnpm/vue-qrcode@2.2.2_qrcode@1.5.3_vue@3.4.29/node_modules/vue-qrcode/lib/index.esm.mjs",
+      "file": "vue-qrcode.js",
+      "fileHash": "64ec0843",
+      "needsInterop": false
+    },
+    "pinia": {
+      "src": "../../../node_modules/.pnpm/pinia@2.1.7_vue@3.4.29/node_modules/pinia/dist/pinia.mjs",
+      "file": "pinia.js",
+      "fileHash": "6b45b855",
       "needsInterop": false
     }
   },
   "chunks": {
-    "chunk-IDX75QLE": {
-      "file": "chunk-IDX75QLE.js"
-    },
     "chunk-OUHRWIIQ": {
       "file": "chunk-OUHRWIIQ.js"
+    },
+    "chunk-IDX75QLE": {
+      "file": "chunk-IDX75QLE.js"
     },
     "chunk-EEENJ2WM": {
       "file": "chunk-EEENJ2WM.js"

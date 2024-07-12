@@ -6,8 +6,8 @@
         <br>
         <br>
         <el-table :data="tableData" style="width: 100%">
-            <el-table-column type="index" width="50" />
-            <el-table-column prop="name" label="ID" width="200" />
+            <el-table-column fixed="left" type="index" width="50" />
+            <el-table-column fixed="left" prop="name" label="ID" width="180 " />
             <el-table-column prop="role" label="角色" width="100">
                 <template #default="scope">
                     <el-tag v-if="scope.row.role == '已注册'" type="success">{{ scope.row.role }}</el-tag>

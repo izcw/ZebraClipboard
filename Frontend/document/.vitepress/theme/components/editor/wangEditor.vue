@@ -20,7 +20,7 @@
             </el-badge>
           </div>
           <div>
-            <el-select v-model="FoxitEditor"  style="width: 140px" placeholder="请选择编辑器">
+            <el-select v-model="FoxitEditor" style="width: 140px" placeholder="请选择编辑器">
               <el-option v-for="item in optionsEditor" :key="item.value" :label="item.label" :value="item.value" />
             </el-select>
           </div>
@@ -43,10 +43,7 @@
 </template>
 
 <script setup>
-import '@wangeditor/editor/dist/css/style.css' // 引入 css
-
-import { onBeforeUnmount, ref, shallowRef, onMounted, watchEffect } from 'vue'
-import { Editor, Toolbar } from '@wangeditor/editor-for-vue'
+import { onBeforeUnmount, ref, shallowRef, onMounted } from 'vue'
 
 // 编辑器实例，必须用 shallowRef
 const editorRef = shallowRef()
