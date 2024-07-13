@@ -20,21 +20,35 @@
             <el-switch v-model="Setting.Burn" />
         </div>
         <div class="QRcode">
-            <vue-qrcode :value="Qrcode.qrCodeValue + Setting.passwd" id="qrCodeDom" :width="Qrcode.qrCodeWidth"></vue-qrcode>
-            <div>
-                <el-text class="mx-1" style="cursor: pointer;user-select:none;"><el-icon>
-                        <CopyDocument />
-                    </el-icon>复制链接</el-text>
-                <el-text class="mx-1" style="cursor: pointer;user-select:none;" @click="handleDownload"><el-icon>
-                        <Download />
-                    </el-icon>下载二维码</el-text>
+            <vue-qrcode :value="Qrcode.qrCodeValue + Setting.passwd" id="qrCodeDom" style="user-select:none;"
+                :width="Qrcode.qrCodeWidth"></vue-qrcode>
+            <div style="width:100%;margin-bottom: 1rem;display: flex;align-items: center;padding:0 12px;">
+                <el-icon>
+                    <Link />
+                </el-icon>&nbsp;
+                <el-text @click="copylink()" style="max-width:250px;width:100%;padding-right:12px;">{{
+                Qrcode.qrCodeValue
+            }}</el-text>
             </div>
+            <el-text class="mx-1" style="cursor: pointer;user-select:none;margin-bottom: 1rem;" @click="handleDownload">
+                <el-icon>
+                    <Download />
+                </el-icon>下载二维码
+            </el-text>
         </div>
+        <div style="margin-top: 1rem;color: var(--vp-c-text-1);display: flex;align-items: center;">
+            <el-icon>
+                <Edit />
+            </el-icon>&nbsp;
+            <el-link href="/docs/user/index.html" style="color: var(--vp-c-text-1);">自定义域名</el-link>
+        </div>
+
     </div>
 </template>
 
 <script setup>
 import { ref, watch } from 'vue'
+import { ElMessage } from 'element-plus'
 let Setting = ref({
     passwd: "",
     ExpirationTime: "3天",
@@ -44,7 +58,7 @@ let Setting = ref({
 
 let Qrcode = ref(
     {
-        qrCodeValue: 'https://example.com',
+        qrCodeValue: 'https://www.zebra.duoyu.link/docs/clipboard/clipboard.html',
         qrCodeWidth: 300
     }
 )
@@ -55,6 +69,14 @@ let handleDownload = () => {
     link.href = qrCodeSrc;
     link.download = 'qrcode.png';
     link.click();
+}
+
+// 复制链接
+const copylink = () => {
+    ElMessage({
+        message: '复制成功',
+        type: 'success',
+    })
 }
 
 
@@ -112,5 +134,10 @@ const optionsTime = [
     display: flex;
     flex-direction: column;
     align-items: center;
+    background-color: #fff;
+}
+
+.Horizontal .el-text {
+    color: var(--vp-c-text-1) !important;
 }
 </style>

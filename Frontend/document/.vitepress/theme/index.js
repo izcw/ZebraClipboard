@@ -5,9 +5,7 @@ import ElementPlus from 'element-plus'// 引入 'element-plus
 import 'element-plus/dist/index.css'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 
-import wangEditor from './components/editor/wangEditor.vue'// 引入 wangeditor
-import '@wangeditor/editor/dist/css/style.css' 
-import { Editor, Toolbar } from '@wangeditor/editor-for-vue';
+import Editor from './components/editor/Editor.vue'
 
 import VueQrcode from 'vue-qrcode' // 导入二维码插件
 
@@ -16,8 +14,11 @@ import ClipboardLayout from './components/Clipboard/Layout.vue'
 import ClipboardLayoutQuery from './components/Clipboard/LayoutQuery.vue'
 import QRcode from './components/Clipboard/sidebar/QRcode.vue'
 import information from './components/Clipboard/sidebar/information.vue'
-import operation from './components/Clipboard/sidebar/operation.vue'
+import Preview from './components/Clipboard/sidebar/Preview.vue'
+// import operation from './components/Clipboard/sidebar/operation.vue'
 import Uploadfiles from './components/editor/Uploadfiles.vue'
+import UserIndex from './components/User/index.vue'
+import login from './components/User/login.vue'
 import tests from './components/test.vue'
 
 import './style.css'
@@ -42,10 +43,8 @@ export default {
     // 二维码
     app.component('vue-qrcode', VueQrcode)
 
-    // wangEditor编辑器
-    app.component('wangEditor', wangEditor)
-    app.component('Editor',Editor)
-    app.component('Toolbar',Toolbar)
+    // Editor
+    app.component('Editor', Editor)
 
     // 注册自定义组件
     app.component('Index', Index)
@@ -53,8 +52,11 @@ export default {
     app.component('ClipboardLayoutQuery', ClipboardLayoutQuery)
     app.component('QRcode', QRcode)
     app.component('information', information)
-    app.component('operation', operation)
+    app.component('Preview', Preview)
+    // app.component('operation', operation)
     app.component('Uploadfiles', Uploadfiles)
+    app.component('UserIndex', UserIndex)
+    app.component('login', login)
     app.component('TestsIndex', tests)
   }
 }

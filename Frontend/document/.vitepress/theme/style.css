@@ -128,10 +128,12 @@
   --vp-custom-block-tip-bg: var(--vp-c-brand-soft);
   --vp-custom-block-tip-code-bg: var(--vp-c-brand-soft);
   --vp-c-bg-custom: var(--vp-c-bg);
+  --tool-background:url(/images/icon/bg.gif);
 }
 
-.dark{
+.dark {
   --vp-c-bg-custom: #272A30;
+  --tool-background:url(/images/icon/bg-black.png);
 }
 
 /**
@@ -176,10 +178,93 @@
 }
 
 /* 编辑器标签页 */
-.el-tabs__header{
+.el-tabs__header {
   margin: 0;
 }
 
 .el-tabs--card>.el-tabs__header {
   border-bottom: none;
+}
+
+.container {
+  max-width: 1400px !important;
+}
+
+
+.el-dialog.is-align-center {
+  width: auto !important;
+}
+
+@media (max-width: 992px) {
+  .container {
+    padding: 0 12px !important;
+  }
+
+  .el-dialog.is-align-center {
+    width: 100% !important;
+    height: 100% !important;
+    background-color: #fff;
+    overflow-y: auto;
+  }
+}
+
+.VPHomeHero {
+  margin: 30px 0 60px 0;
+}
+
+.VPNavScreen {
+  z-index: 999999 !important;
+}
+
+.VPFeature .VPImage {
+  width: 30px;
+  height: 30px;
+}
+
+.VPHomeHero .text {
+  font-size: 30px;
+}
+
+
+.el-link.is-underline:hover:after {
+  border: none;
+}
+
+
+.el-select__selected-item span {
+  font-size: 12px;
+}
+
+.el-tabs__item {
+  color: var(--vp-c-text-1) !important;
+}
+
+.el-tabs__item.is-active{
+  color: var(--vp-c-brand-1) !important;
+}
+
+.el-tabs--card>.el-tabs__header .el-tabs__nav{
+  border: 1px solid var(--vp-c-divider);
+  box-shadow: rgb(197, 197, 197) 0px 0px 2px inset;
+}
+
+.el-tabs--card>.el-tabs__header .el-tabs__item {
+  border-bottom: 1px solid transparent;
+  border-left: 1px solid var(--vp-c-divider);
+}
+
+.el-dialog.is-align-center{
+  background-color: var(--vp-c-bg-custom);
+}
+
+.el-statistic__head{
+  color:var(--vp-c-brand-1) !important;
+}
+
+.el-statistic__content{
+  color: var(--vp-c-text-1) !important;
+}
+
+.el-dialog__header.show-close span{
+  color: var(--vp-c-text-1) !important;
 }

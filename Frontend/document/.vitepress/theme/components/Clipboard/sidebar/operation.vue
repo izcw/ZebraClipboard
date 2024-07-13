@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
     <div class="commonblock">
         <div class="Horizontal">
             <el-button type="primary" plain>复制文本</el-button>
@@ -12,4 +12,4 @@
 import { ref } from 'vue'
 </script>
 
-<style scoped></style>
+<style scoped></style> -->

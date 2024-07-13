@@ -14,9 +14,9 @@ export default defineConfig({
       { text: '首页', link: '/' },
       { text: '剪贴板', link: '/docs/clipboard/clipboard' },
       { text: '查询剪贴板', link: '/docs/clipboard/query' },
-      { text: '在线支持', link: '/docs/about/Reward.md' },
-      { text: '关于我们', link: '/docs/about/index' },
-      { text: '登录&nbsp;/&nbsp;注册', link: '/markdown-examples' },
+      { text: '捐赠', link: '/docs/about/Reward.md' },
+      // { text: '关于我们', link: '/docs/about/index' },
+      { text: '登录&nbsp;/&nbsp;注册', link: '/docs/user/login.md' },
     ],
 
     sidebar: [
@@ -29,6 +29,12 @@ export default defineConfig({
         ]
       },
       {
+        text: '举报中心',
+        items: [
+          { text: '非法内容举报', link: '/docs/report/ContentReport' },
+        ]
+      },
+      {
         text: '服务协议',
         items: [
           { text: '隐私政策', link: '/docs/service/PrivacyPolicy' },
@@ -38,12 +44,12 @@ export default defineConfig({
 
     ],
 
-    socialLinks: [
-      { icon: 'github', link: 'https://github.com/vuejs/vitepress' }
-    ],
+    // socialLinks: [
+    //   { icon: 'github', link: 'https://github.com/vuejs/vitepress' }
+    // ],
     sitemap: {
-      hostname: 'https://example.com',
-      lastmodDateOnly: false
+      hostname: 'https://www.zebra.duoyu.link/',
+      lastmodDateOnly: true
     },
     footer: {
       message: '<div style="display: flex;justify-content: center;align-items: center;"><img src="/publicsecurity.png">桂公网安备 45098102000466号&emsp;&emsp;桂ICP备2022009640号-2</div>',

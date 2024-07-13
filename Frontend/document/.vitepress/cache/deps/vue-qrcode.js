@@ -1,11 +1,13 @@
 import {
-  __commonJS,
-  __toESM,
   defineComponent,
   h,
   ref,
   watch
-} from "./chunk-EEENJ2WM.js";
+} from "./chunk-32T6PNAD.js";
+import {
+  __commonJS,
+  __toESM
+} from "./chunk-5WRI5ZAA.js";
 
 // node_modules/.pnpm/qrcode@1.5.3/node_modules/qrcode/lib/can-promise.js
 var require_can_promise = __commonJS({

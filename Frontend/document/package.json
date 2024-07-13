@@ -9,8 +9,11 @@
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.3.1",
-    "@wangeditor/editor": "^5.1.23",
-    "@wangeditor/editor-for-vue": "^5.1.12",
+    "@tiptap/extension-heading": "^2.4.0",
+    "@tiptap/extension-underline": "^2.4.0",
+    "@tiptap/pm": "^2.4.0",
+    "@tiptap/starter-kit": "^2.4.0",
+    "@tiptap/vue-3": "^2.4.0",
     "element-plus": "^2.7.5",
     "pinia": "^2.1.7",
     "vue-qrcode": "^2.2.2"
