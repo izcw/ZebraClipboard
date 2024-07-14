@@ -1,5 +1,8 @@
+import { watch } from 'vue';
 import { createRouter, createWebHistory } from 'vue-router';
 import Layout from '@/layouts/index.vue';
+
+
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -128,5 +131,33 @@ const router = createRouter({
     }
   ]
 });
+
+// 定义一个函数来格式化标题
+function formatTitle(title) {
+  return `${title} | 斑马在线剪贴板`; // 替换为你想要的默认标题
+}
+
+// 监听路由变化
+function updateTitle(newTitle) {
+  document.title = formatTitle(newTitle);
+}
+
+// 路由守卫
+router.beforeEach((to, from, next) => {
+  if (to.meta.title) {
+    updateTitle(to.meta.title);
+  }
+  next();
+});
+
+// 响应式地监听标题变化
+watch(
+  () => router.currentRoute.value.meta.title,
+  (newTitle) => {
+    if (newTitle) {
+      updateTitle(newTitle);
+    }
+  }
+);
 
 export default router;

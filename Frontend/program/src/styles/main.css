@@ -1,5 +1,6 @@
 @import './theme.scss';
 @import './public.scss';
+@import './el.css';
 /* 公共变量 */
 
 * {

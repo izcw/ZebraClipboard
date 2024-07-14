@@ -1,6 +1,6 @@
 <template>
     <div class="login-layout">
-        <div class="left">
+        <!-- <div class="left">
             <el-image style="width: 100px; height: 100px" :src="er" fit="cover" />
             <div>
                 <el-carousel trigger="click" height="150px" style="background-color: #fff;">
@@ -9,10 +9,13 @@
                     </el-carousel-item>
                 </el-carousel>
             </div>
-        </div>
+        </div> -->
         <div class="right">
             <div class="login-box">
-                <el-image style="width: 50px; height: 50px" :src="er" fit="cover" />
+                <div class="logo-loginbox">
+                    <img :src="logo" alt="斑马在线剪贴板">
+                    <span>斑马在线剪贴板</span>
+                </div>
                 <box-icon :name='themeStore.isDarkTheme == true ? "sun" : "moon"' class="boxicons-custom"
                     color="var(--component-icon-color)" size="22px" @click="themeStore.toggleTheme"></box-icon>
                 <el-tabs v-model="activeName" class="demo-tabs" @tab-click="handleClick">
@@ -30,8 +33,10 @@
             </div>
             <div class="login-footer">
                 <div class="footer-inline">
-                    <span>Copyright © 2024 izcw.</span>
-                    <a href="https://beian.miit.gov.cn/"><span>xxxxxx号-2</span></a>
+                    <p>Copyright © 2024 张成威</p>
+                    <p>&emsp;
+                        <a href="https://beian.miit.gov.cn/">桂公网安备 45098102000466号&emsp;桂ICP备2022009640号-2</a>
+                    </p>
                 </div>
             </div>
         </div>
@@ -41,11 +46,11 @@
 import { reactive, ref } from 'vue'
 import loginbox from './module/login.vue'
 import registerbox from './module/register.vue'
-import sd from '../../assets/image/logo3.png'
+import logoimg from '../../assets/image/logo.png'
 import { useThemeStore } from '@/stores/theme';
 const themeStore = useThemeStore();
 const activeName = ref('first')
-let er = sd
+let logo = logoimg
 const url =
     'https://fuss10.elemecdn.com/a/3f/3302e58f9a181d2509f3dc0fa68b0jpeg.jpeg'
 </script>
@@ -98,9 +103,17 @@ const url =
         width: 500px;
         min-height: 300px;
         box-sizing: border-box;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        position: relative;
 
-        .container{
+        .container {
             padding: 15px 0;
+        }
+
+        .boxicons-custom {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
         }
     }
 
@@ -111,12 +124,55 @@ const url =
 
         padding: 15px;
         color: #888;
-        font-size: 14px;
+        font-size: 12px;
+
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
 
         a {
             color: inherit;
             text-decoration: none;
         }
     }
+}
+
+
+.logo-loginbox {
+    width: 100%;
+    margin: 20px 0 30px 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    span {
+        font-size: 18px;
+        font-weight: bold;
+        margin-left: 1rem;
+    }
+
+    img {
+        width: 60px;
+        height: 60px;
+    }
+}
+
+
+
+@media (max-width: 576px) {
+    .login-box {
+        width: 100% !important;
+        height: 100% !important;
+        display: flex;
+        flex-direction: column;
+        border: none !important;
+    }
+
+    .logo-loginbox {
+        margin-bottom: 120px;
+    }
+
 }
 </style>

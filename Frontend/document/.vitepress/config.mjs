@@ -53,7 +53,7 @@ export default defineConfig({
     },
     footer: {
       message: '<div style="display: flex;justify-content: center;align-items: center;flex-wrap: wrap;">&emsp;<img style="width: 16px;height: 16px;" src="/publicsecurity.png">桂公网安备 45098102000466号&emsp;&emsp;<p>桂ICP备2022009640号-2</p>&emsp;</div>',
-      copyright: 'Copyright © 2023-2024 张成威'
+      copyright: 'Copyright © 2024 张成威'
     }
   }
 })
