@@ -1,73 +1,73 @@
 {
-  "hash": "b4629a39",
-  "configHash": "550ad736",
+  "hash": "0168c990",
+  "configHash": "39c080a9",
   "lockfileHash": "e6ffd843",
-  "browserHash": "5bb1b642",
+  "browserHash": "2b80d572",
   "optimized": {
     "vue": {
       "src": "../../../node_modules/.pnpm/vue@3.4.29/node_modules/vue/dist/vue.runtime.esm-bundler.js",
       "file": "vue.js",
-      "fileHash": "4e2be86d",
+      "fileHash": "d2b7d896",
       "needsInterop": false
     },
     "vitepress > @vue/devtools-api": {
       "src": "../../../node_modules/.pnpm/@vue+devtools-api@7.3.0_vue@3.4.29/node_modules/@vue/devtools-api/dist/index.js",
       "file": "vitepress___@vue_devtools-api.js",
-      "fileHash": "192e12c4",
+      "fileHash": "cfaea8bf",
       "needsInterop": false
     },
     "vitepress > @vueuse/core": {
       "src": "../../../node_modules/.pnpm/@vueuse+core@10.11.0_vue@3.4.29/node_modules/@vueuse/core/index.mjs",
       "file": "vitepress___@vueuse_core.js",
-      "fileHash": "d360f709",
+      "fileHash": "002ff534",
       "needsInterop": false
     },
     "element-plus": {
       "src": "../../../node_modules/.pnpm/element-plus@2.7.5_vue@3.4.29/node_modules/element-plus/es/index.mjs",
       "file": "element-plus.js",
-      "fileHash": "162b9f36",
+      "fileHash": "f0b43999",
       "needsInterop": false
     },
     "@element-plus/icons-vue": {
       "src": "../../../node_modules/.pnpm/@element-plus+icons-vue@2.3.1_vue@3.4.29/node_modules/@element-plus/icons-vue/dist/index.js",
       "file": "@element-plus_icons-vue.js",
-      "fileHash": "d6d6369e",
+      "fileHash": "a091620c",
       "needsInterop": false
     },
     "vue-qrcode": {
       "src": "../../../node_modules/.pnpm/vue-qrcode@2.2.2_qrcode@1.5.3_vue@3.4.29/node_modules/vue-qrcode/lib/index.esm.mjs",
       "file": "vue-qrcode.js",
-      "fileHash": "38cfcafe",
+      "fileHash": "abc6e773",
       "needsInterop": false
     },
     "pinia": {
       "src": "../../../node_modules/.pnpm/pinia@2.1.7_vue@3.4.29/node_modules/pinia/dist/pinia.mjs",
       "file": "pinia.js",
-      "fileHash": "9e5828c9",
+      "fileHash": "ff79f4e4",
       "needsInterop": false
     },
     "@tiptap/vue-3": {
       "src": "../../../node_modules/.pnpm/@tiptap+vue-3@2.4.0_@tiptap+core@2.4.0_@tiptap+pm@2.4.0__@tiptap+pm@2.4.0_vue@3.4.29/node_modules/@tiptap/vue-3/dist/index.js",
       "file": "@tiptap_vue-3.js",
-      "fileHash": "7a3faa20",
+      "fileHash": "6a43b512",
       "needsInterop": false
     },
     "@tiptap/starter-kit": {
       "src": "../../../node_modules/.pnpm/@tiptap+starter-kit@2.4.0_@tiptap+pm@2.4.0/node_modules/@tiptap/starter-kit/dist/index.js",
       "file": "@tiptap_starter-kit.js",
-      "fileHash": "3221105a",
+      "fileHash": "3d0ca4af",
       "needsInterop": false
     },
     "@tiptap/extension-underline": {
       "src": "../../../node_modules/.pnpm/@tiptap+extension-underline@2.4.0_@tiptap+core@2.4.0_@tiptap+pm@2.4.0_/node_modules/@tiptap/extension-underline/dist/index.js",
       "file": "@tiptap_extension-underline.js",
-      "fileHash": "927cd0cd",
+      "fileHash": "a0d0a7ee",
       "needsInterop": false
     },
     "@tiptap/extension-heading": {
       "src": "../../../node_modules/.pnpm/@tiptap+extension-heading@2.4.0_@tiptap+core@2.4.0_@tiptap+pm@2.4.0_/node_modules/@tiptap/extension-heading/dist/index.js",
       "file": "@tiptap_extension-heading.js",
-      "fileHash": "41fcceba",
+      "fileHash": "1a5fc16f",
       "needsInterop": false
     }
   },

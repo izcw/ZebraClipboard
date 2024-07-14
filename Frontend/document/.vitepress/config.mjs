@@ -12,8 +12,8 @@ export default defineConfig({
     logo: "/favicon.ico",
     nav: [
       { text: '首页', link: '/' },
-      { text: '剪贴板', link: '/docs/clipboard/clipboard' },
-      { text: '查询剪贴板', link: '/docs/clipboard/query' },
+      { text: '剪贴板', link: '/clipboard' },
+      { text: '查询剪贴板', link: '/query' },
       { text: '捐赠', link: '/docs/about/Reward.md' },
       // { text: '关于我们', link: '/docs/about/index' },
       { text: '登录&nbsp;/&nbsp;注册', link: '/docs/user/login.md' },
@@ -52,7 +52,7 @@ export default defineConfig({
       lastmodDateOnly: true
     },
     footer: {
-      message: '<div style="display: flex;justify-content: center;align-items: center;"><img src="/publicsecurity.png">桂公网安备 45098102000466号&emsp;&emsp;桂ICP备2022009640号-2</div>',
+      message: '<div style="display: flex;justify-content: center;align-items: center;flex-wrap: wrap;">&emsp;<img style="width: 16px;height: 16px;" src="/publicsecurity.png">桂公网安备 45098102000466号&emsp;&emsp;<p>桂ICP备2022009640号-2</p>&emsp;</div>',
       copyright: 'Copyright © 2023-2024 张成威'
     }
   }

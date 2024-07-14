@@ -128,11 +128,13 @@
   --vp-custom-block-tip-bg: var(--vp-c-brand-soft);
   --vp-custom-block-tip-code-bg: var(--vp-c-brand-soft);
   --vp-c-bg-custom: var(--vp-c-bg);
+  --bg-preview:#f7f7f7;
   --tool-background:url(/images/icon/bg.gif);
 }
 
 .dark {
   --vp-c-bg-custom: #272A30;
+  --bg-preview:#1a1a1a;
   --tool-background:url(/images/icon/bg-black.png);
 }
 
@@ -267,4 +269,13 @@
 
 .el-dialog__header.show-close span{
   color: var(--vp-c-text-1) !important;
+}
+
+
+.el-affix{
+  width: 100% !important;
+}
+
+.el-overlay {
+  background-color: rgb(0 0 0 / 70%);
 }

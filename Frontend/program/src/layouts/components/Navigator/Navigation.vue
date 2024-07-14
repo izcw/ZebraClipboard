@@ -42,7 +42,6 @@ console.log(RouteCurrent, "当前", route.path);
     .item {
         display: flex;
         align-items: center;
-        margin: 10px 0;
         cursor: pointer;
         padding: 10px 15px;
         border-radius: 10px;

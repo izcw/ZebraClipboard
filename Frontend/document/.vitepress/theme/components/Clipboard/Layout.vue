@@ -1,21 +1,28 @@
 <template>
     <div>
         <div class="box">
+            <div class="nd-box" @click="ndFolditup()">
+                <img v-show="!ndstatus" src="/images/icon/nd-left.png" alt="">
+                <img v-show="ndstatus" src="/images/icon/nd-right.png" alt="">
+            </div><!-- 折叠工具栏 -->
+
             <div class="left">
                 <dir style="padding-bottom: 1rem;  display: flex;justify-content: space-between;align-items: center;">
                     <div>
-                        <el-button plain @click="addTab(editableTabsValue)" size="large" style="background-color:var(--vp-c-bg-custom);color:var(--vp-c-text-1);border: 1px solid var(--vp-c-divider);">
-                            <el-icon><DocumentAdd /></el-icon>&ensp;新建文本文档
+                        <el-button plain @click="addTab(editableTabsValue)" size="large"
+                            style="background-color:var(--vp-c-bg-custom);color:var(--vp-c-text-1);border: 1px solid var(--vp-c-divider);">
+                            <el-icon>
+                                <DocumentAdd />
+                            </el-icon>&ensp;新建文本文档
                         </el-button>&emsp;
                         <el-text v-if="true" type="success" size="small">已于 02:57:33
                             保存成功</el-text>
                         <el-text v-else type="warning" size="small">网络中断 本地存储中</el-text>
                     </div>
-                    <el-text class="mx-1 expire" style="color: var(--vp-c-text-1);" @click="centerDialogVisible = true"
-                        size="small">
+                    <el-text v-show="!ndstatus" class="mx-1 expire" style="color: var(--vp-c-text-1);"
+                        @click="centerDialogVisible = true" size="small">
                         <span>3</span>天后过期</el-text>
                 </dir>
-
                 <el-tabs v-model="editableTabsValue" type="card" closable @tab-remove="tabremove()" class="demo-tabs"
                     @edit="handleTabsEdit">
                     <el-tab-pane v-for="item in editableTabs" :key="item.name" :label="item.title" :name="item.name">
@@ -24,51 +31,27 @@
                 </el-tabs>
             </div>
 
+            <div class="right" v-show="ndstatus">
+                <QRcode></QRcode>
+                <information></information>
+            </div><!-- 工具栏 -->
 
             <el-dialog v-model="centerDialogVisible" title="分享" align-center>
-                <div class="right">
-                    <div style="margin:0 2rem;">
-                        <el-text class="mx-1" type="success">更新成功</el-text>
-                        <!-- <operation></operation> -->
-                        <QRcode></QRcode>
-                    </div>
-                    <div style="margin:0 2rem;">
-                        <Preview></Preview>
-                        <information></information>
-                        <el-link href="/docs/report/ContentReport" type="danger" size="large" style="color:#f56c6c;">
-                            <el-icon>
-                                <WarnTriangleFilled />
-                            </el-icon>非法内容举报（请不要上传敏感信息！）
-                        </el-link>
-                    </div>
-                </div>
-            </el-dialog>
-        </div>
-        <div style="display: flex;flex-wrap: wrap; justify-content: space-between;user-select:none;">
-            <div>
-                <el-text class="mx-1" type="info">斑马在线剪贴板是一个极简、开源、免费的在线剪贴板，浏览器数据使用AES-256加密。</el-text>
-                <br>
-                <el-text class="mx-1" type="info">技术支持：<el-link href="https://www.zhangchengwei.work"
-                        style="color:#999">张成威</el-link> v1.0.0</el-text>
-            </div>
-            <br>
-            <br>
-            <el-link href="/docs/report/ContentReport" type="danger" size="large" style="color:#f56c6c;">
-                <el-icon>
-                    <WarnTriangleFilled />
-                </el-icon>非法内容举报（请不要上传敏感信息！）
-            </el-link>
+                <sidebarIndex></sidebarIndex>
+            </el-dialog><!-- 分享模态框 -->
         </div>
 
+        <FooterInfo></FooterInfo>
     </div>
 
 </template>
 
 <script setup>
 import { ref, provide, markRaw } from 'vue'
-import { ElMessageBox,ElMessage } from 'element-plus'
+import { ElMessageBox, ElMessage } from 'element-plus'
 import { Delete } from '@element-plus/icons-vue'
 
+// 分享模态框
 const centerDialogVisible = ref(false);
 provide('centerDialogVisible', centerDialogVisible);
 
@@ -143,11 +126,18 @@ const handleTabsEdit = (
         editableTabs.value = tabs.filter((tab) => tab.name !== targetName)
     }
 }
+
+
+// 工具栏折叠
+let ndstatus = ref(false)
+let ndFolditup = () => {
+    console.log("dianji");
+    ndstatus.value = !ndstatus.value
+}
 </script>
 
 <style scoped>
 .commonblock {
-    /*border-bottom: 1px dashed rgba(0, 0, 0, .1);*/
     padding-bottom: 30px;
     margin-bottom: 30px;
 }
@@ -156,43 +146,26 @@ const handleTabsEdit = (
     display: flex;
     align-items: flex-start;
     margin: 10px 0 60px 0;
+    position: relative;
 }
 
 .left {
     width: 100%;
-
     position: relative;
 }
 
-/*.left .Successfullysaved {
-    position: absolute;
-    right: 0px;
-    top: 5px;
-}*/
-
-
-
 .right {
-    min-width: 300px;
-    /*width: 240px;
-    min-width: 240px;*/
+    width: 270px;
+    max-width: 270px;
     height: auto;
-    margin-left: 15px;
     padding: 30px 15px;
+    padding-top: 80px;
+    margin-left: 15px;
     box-sizing: border-box;
-    /*box-shadow: 0px 0px 6px 0 rgba(0, 0, 0, .1);*/
     background-color: var(--vp-c-bg-custom);
-    opacity: 0.8;
     transition: all ease 0.2s;
-
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
 }
 
-.right:hover {
-    opacity: 1;
-}
 
 @media (max-width: 992px) {
     .box {
@@ -216,5 +189,40 @@ const handleTabsEdit = (
 .editor {
     box-shadow: 0px 0px 6px 0 rgba(0, 0, 0, .1);
     margin-bottom: 60px;
+}
+
+/*折叠按钮*/
+.nd-box {
+    position: absolute;
+    right: 0;
+    top: 54px;
+    width: 30px;
+    height: 30px;
+    padding: 6px;
+    cursor: pointer;
+    z-index: 20;
+    user-select: none;
+
+    transition: all ease 0.5s;
+    opacity: 0.8;
+}
+
+.nd-box:hover {
+    opacity: 1;
+}
+
+.nd-box img {
+    width: 100%;
+    height: 100%;
+}
+
+@media (max-width: 992px) {
+    .nd-box {
+        display: none;
+    }
+
+    .right {
+        display: none;
+    }
 }
 </style>

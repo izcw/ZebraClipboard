@@ -11,10 +11,10 @@ hero:
   actions:
     - theme: brand
       text: 亲自试试，立即体验
-      link: /docs/clipboard/clipboard.md
+      link: /clipboard.md
     - theme: alt
       text: 查看共享剪贴板
-      link: /docs/clipboard/query.md
+      link: /query.md
 
 features:
   - title: 支持多种编辑器

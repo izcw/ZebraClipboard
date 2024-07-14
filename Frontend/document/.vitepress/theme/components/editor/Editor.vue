@@ -4,6 +4,7 @@
       <img v-show="!copystatus" src="/images/icon/copy.png" alt="">
       <img v-show="copystatus" src="/images/icon/answer.png" alt="">
     </div>
+
     <div style="box-shadow: inset 0 0 2px #c5c5c5;">
       <!-- <div class="tools" style="border-bottom: 1px dashed rgb(204, 204, 204);">
         <el-select style="width: 65px" v-model="Headingsearch" :placeholder="Headingsearch">
@@ -22,7 +23,7 @@
     <el-affix position="bottom" :offset="0">
       <div class="SaveDelete">
         <div class="">
-          <el-select v-model="FoxitEditor" style="width: 160px" placeholder="请选择编辑器">
+          <el-select v-model="FoxitEditor" style="width: 160px;z-index: 30;" placeholder="请选择编辑器">
             <el-option v-for="item in optionsEditor" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
         </div>
@@ -184,6 +185,8 @@ onMounted(() => {
   width: 100%;
   height: 100%;
 }
+
+
 
 /*编辑器*/
 .content-box .ProseMirror {
