@@ -43,8 +43,13 @@
                 </CardIndex>
             </el-col>
             <el-col :span="12">
-                <div class="Occupying-box  layout-padding-small layout-margin-bottom-large">
-                    666666
+                <div class="Occupying-box component layout-margin-bottom-large">
+                    <el-carousel height="320px">
+                        <el-carousel-item v-for="item in 2" :key="item">
+                            <img v-if="item == 1" src="https://picserver.duoyu.link/picfile/image/202306/07-1686098627954.png" alt="">
+                            <img v-else src="https://picserver.duoyu.link/picfile/image/202407/18-1721237669960.jpg" alt="">
+                        </el-carousel-item>
+                      </el-carousel>
                 </div>
                 <CardIndex>
                     <template #title>
@@ -77,8 +82,16 @@ import EchartsUsage from "@/components/Echarts/Usage.vue";
 
 <style scoped lang='scss'>
 /* 占位盒子 */
-.Occupying-box{
+.Occupying-box {
     width: 100%;
-    height: 400px;
+    border-radius: 10px;
+    overflow: hidden;
+
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+    }
 }
 </style>

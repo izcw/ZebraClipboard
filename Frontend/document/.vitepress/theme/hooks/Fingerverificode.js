@@ -47,8 +47,9 @@ export const Fingerverificode = () => {
                         user: accountnumber.value.Browserid.user
                     },
                     VerifiCode: generateRandomCode(),
-                    VerifiCodeTime: cTime,
-                    create: cTime
+                    VerifiCodeTime:String(cTime),
+                    create: String(cTime),
+                    limitationID:"1"
                 };
                 const response3 = await axios.post('/user', newUser);
                 users.value.push(response3.data);

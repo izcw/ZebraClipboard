@@ -16,6 +16,7 @@ const router = createRouter({
         title: "仪表盘",
         icon: 'face',
       },
+      menuStatus:true,
       role: ['admin', 'user'],
       children: [
         {
@@ -37,6 +38,7 @@ const router = createRouter({
         title: "管理",
         icon: 'face',
       },
+      menuStatus:true,
       role: ['admin', 'user'],
       children: [
         {
@@ -49,32 +51,32 @@ const router = createRouter({
           }
         },
         {
-          path: 'text2',
-          name: 'text2',
-          component: () => import('@/views/manage/text2.vue'),
-          meta: {
-            title: "测试",
-            icon: 'face',
-          }
-        },
-        {
-          path: '/about2',
-          name: 'about2',
-          component: () => import('@/layouts/components/About/index2.vue'),
+          path: 'clipboard',
+          name: 'manageClipboard',
+          component: () => import('@/views/manage/clipboard.vue'),
           meta: {
             title: "剪贴板管理",
-            icon: 'face',
+            icon: 'clipboard',
           }
         },
         {
-          path: '/about2',
-          name: 'about2',
-          component: () => import('@/layouts/components/About/index2.vue'),
+          path: 'annexfile',
+          name: 'manageAnnexfile',
+          component: () => import('@/views/manage/annexFile.vue'),
           meta: {
-            title: "文件管理",
-            icon: 'face',
-          }
+            title: "附件管理",
+            icon: 'file',
+          },
         },
+        {
+          path: 'planspricing',
+          name: 'managePlanspricing',
+          component: () => import('@/views/manage/PlansPricing.vue'),
+          meta: {
+            title: "套餐管理",
+            icon: 'money',
+          }
+        }
       ]
     },
     {
@@ -85,24 +87,25 @@ const router = createRouter({
         title: "异常处理",
         icon: 'face',
       },
+      menuStatus:true,
       role: ['admin', 'user'],
       children: [
         {
-          path: '/about1',
-          name: 'about1',
-          component: () => import('@/layouts/components/About/index.vue'),
+          path: 'examine',
+          name: 'violationExamine',
+          component: () => import('@/views/errorCenter/index.vue'),
           meta: {
             title: "异常审核",
-            icon: 'face',
+            icon: 'shield-minus',
           }
         },
         {
-          path: '/about1',
-          name: 'about1',
-          component: () => import('@/layouts/components/About/index.vue'),
+          path: 'report',
+          name: 'violationReport',
+          component: () => import('@/views/errorCenter/report.vue'),
           meta: {
             title: "举报中心",
-            icon: 'face',
+            icon: 'user-voice',
           }
         },
       ]
@@ -115,6 +118,7 @@ const router = createRouter({
         title: "我的",
         icon: 'face',
       },
+      menuStatus:true,
       role: ['admin', 'user'],
       children: [
         {
@@ -135,6 +139,7 @@ const router = createRouter({
         title: "登录",
         icon: '',
       },
+      menuStatus:false,
       role: [],
       component: () => import('../views/login/index.vue'),
     }

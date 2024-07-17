@@ -1,18 +1,21 @@
 <template>
     <div>
         <div class="nav-box" v-for="(item, index) in RouteData" :key="index">
-            <hr>
-            <h5>{{ item.meta.title }}</h5>
-            <!-- <h5>{{ item.role }}</h5> -->
-            <router-link v-for="(item2,index2) in item.children" :key="index2" :to="{ name: item2.name}">
-                <div class="item" :class="{active:route.name == item2.name }">
-                    <div class="nav-icon">
-                        <box-icon :name="item2.meta.icon"
-                            :color="route.name == item2.name ? 'var(--component-icon-color-reverse)' : 'var(--component-icon-color-default)'"></box-icon>
+            <div v-if="item.menuStatus != false">
+                <hr>
+                <h5>{{ item.meta.title }}</h5>
+                <!-- <h5>{{ item.role }}</h5> -->
+                <router-link v-for="(item2, index2) in item.children" :key="index2" :to="{ name: item2.name }">
+                    <div class="item" :class="{ active: route.name == item2.name }">
+                        <div class="nav-icon">
+                            <box-icon :name="item2.meta.icon"
+                                :color="route.name == item2.name ? 'var(--component-icon-color-reverse)' : 'var(--component-icon-color-default)'"></box-icon>
+                        </div>
+                        <h5>{{ item2.meta.title }}</h5>
                     </div>
-                    <h5>{{item2.meta.title}}</h5>
-                </div>
-            </router-link>
+                </router-link>
+            </div>
+
         </div>
     </div>
 </template>
