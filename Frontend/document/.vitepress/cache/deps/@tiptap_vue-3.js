@@ -92,9 +92,8 @@ import {
   textPasteRule,
   textblockTypeInputRule,
   wrappingInputRule
-} from "./chunk-UI7E3QZO.js";
+} from "./chunk-6HCLKSW4.js";
 import {
-  Teleport,
   customRef,
   defineComponent,
   getCurrentInstance,
@@ -106,11 +105,12 @@ import {
   provide,
   reactive,
   ref,
+  render,
   shallowRef,
   unref,
   watchEffect
-} from "./chunk-32T6PNAD.js";
-import "./chunk-5WRI5ZAA.js";
+} from "./chunk-IJ77GX6U.js";
+import "./chunk-G3PMV62Z.js";
 
 // node_modules/.pnpm/@popperjs+core@2.11.8/node_modules/@popperjs/core/lib/enums.js
 var top = "top";
@@ -2018,7 +2018,7 @@ function getChildren(popper2) {
     })
   };
 }
-function render(instance) {
+function render2(instance) {
   var popper2 = div();
   var box = div();
   box.className = BOX_CLASS;
@@ -2073,7 +2073,7 @@ function render(instance) {
     onUpdate
   };
 }
-render.$$tippy = true;
+render2.$$tippy = true;
 var idCounter = 1;
 var mouseMoveListeners = [];
 var mountedInstances = [];
@@ -2853,11 +2853,11 @@ var applyStylesModifier = Object.assign({}, applyStyles_default, {
   }
 });
 tippy.setDefaultProps({
-  render
+  render: render2
 });
 var tippy_esm_default = tippy;
 
-// node_modules/.pnpm/@tiptap+extension-bubble-menu@2.4.0_@tiptap+core@2.4.0_@tiptap+pm@2.4.0__@tiptap+pm@2.4.0/node_modules/@tiptap/extension-bubble-menu/dist/index.js
+// node_modules/.pnpm/@tiptap+extension-bubble-menu@2.5.0_@tiptap+core@2.5.0_@tiptap+pm@2.5.0__@tiptap+pm@2.5.0/node_modules/@tiptap/extension-bubble-menu/dist/index.js
 var BubbleMenuView = class {
   constructor({ editor, element, view, tippyOptions = {}, updateDelay = 250, shouldShow }) {
     this.preventHide = false;
@@ -2986,7 +2986,7 @@ var BubbleMenuView = class {
   }
   update(view, oldState) {
     const { state } = view;
-    const hasValidSelection = state.selection.$from.pos !== state.selection.$to.pos;
+    const hasValidSelection = state.selection.from !== state.selection.to;
     if (this.updateDelay > 0 && hasValidSelection) {
       this.handleDebouncedUpdate(view, oldState);
       return;
@@ -3049,7 +3049,7 @@ var BubbleMenu = Extension.create({
   }
 });
 
-// node_modules/.pnpm/@tiptap+extension-floating-menu@2.4.0_@tiptap+core@2.4.0_@tiptap+pm@2.4.0__@tiptap+pm@2.4.0/node_modules/@tiptap/extension-floating-menu/dist/index.js
+// node_modules/.pnpm/@tiptap+extension-floating-menu@2.5.0_@tiptap+core@2.5.0_@tiptap+pm@2.5.0__@tiptap+pm@2.5.0/node_modules/@tiptap/extension-floating-menu/dist/index.js
 var FloatingMenuView = class {
   constructor({ editor, element, view, tippyOptions = {}, shouldShow }) {
     this.preventHide = false;
@@ -3192,7 +3192,7 @@ var FloatingMenu = Extension.create({
   }
 });
 
-// node_modules/.pnpm/@tiptap+vue-3@2.4.0_@tiptap+core@2.4.0_@tiptap+pm@2.4.0__@tiptap+pm@2.4.0_vue@3.4.29/node_modules/@tiptap/vue-3/dist/index.js
+// node_modules/.pnpm/@tiptap+vue-3@2.5.0_@tiptap+core@2.5.0_@tiptap+pm@2.5.0__@tiptap+pm@2.5.0_vue@3.4.31/node_modules/@tiptap/vue-3/dist/index.js
 var BubbleMenu2 = defineComponent({
   name: "BubbleMenu",
   props: {
@@ -3261,12 +3261,12 @@ function useDebouncedRef(value) {
 var Editor2 = class extends Editor {
   constructor(options = {}) {
     super(options);
-    this.vueRenderers = reactive(/* @__PURE__ */ new Map());
     this.contentComponent = null;
+    this.appContext = null;
     this.reactiveState = useDebouncedRef(this.view.state);
     this.reactiveExtensionStorage = useDebouncedRef(this.extensionStorage);
-    this.on("transaction", () => {
-      this.reactiveState.value = this.view.state;
+    this.on("beforeTransaction", ({ nextState }) => {
+      this.reactiveState.value = nextState;
       this.reactiveExtensionStorage.value = this.extensionStorage;
     });
     return markRaw(this);
@@ -3313,6 +3313,16 @@ var EditorContent = defineComponent({
           const element = unref(rootEl.value);
           rootEl.value.append(...editor.options.element.childNodes);
           editor.contentComponent = instance.ctx._;
+          if (instance) {
+            editor.appContext = {
+              ...instance.appContext,
+              provides: {
+                // @ts-ignore
+                ...instance.provides,
+                ...instance.appContext.provides
+              }
+            };
+          }
           editor.setOptions({
             element
           });
@@ -3331,6 +3341,7 @@ var EditorContent = defineComponent({
         });
       }
       editor.contentComponent = null;
+      editor.appContext = null;
       if (!editor.options.element.firstChild) {
         return;
       }
@@ -3343,24 +3354,11 @@ var EditorContent = defineComponent({
     return { rootEl };
   },
   render() {
-    const vueRenderers = [];
-    if (this.editor) {
-      this.editor.vueRenderers.forEach((vueRenderer) => {
-        const node = h(Teleport, {
-          to: vueRenderer.teleportElement,
-          key: vueRenderer.id
-        }, h(vueRenderer.component, {
-          ref: vueRenderer.id,
-          ...vueRenderer.props
-        }));
-        vueRenderers.push(node);
-      });
-    }
     return h("div", {
       ref: (el) => {
         this.rootEl = el;
       }
-    }, ...vueRenderers);
+    });
   }
 });
 var FloatingMenu2 = defineComponent({
@@ -3463,29 +3461,35 @@ var VueRenderer = class {
     this.id = Math.floor(Math.random() * 4294967295).toString();
     this.editor = editor;
     this.component = markRaw(component);
-    this.teleportElement = document.createElement("div");
-    this.element = this.teleportElement;
+    this.el = document.createElement("div");
     this.props = reactive(props);
-    this.editor.vueRenderers.set(this.id, this);
-    if (this.editor.contentComponent) {
-      this.editor.contentComponent.update();
-      if (this.teleportElement.children.length !== 1) {
-        throw Error("VueRenderer doesn’t support multiple child elements.");
-      }
-      this.element = this.teleportElement.firstElementChild;
-    }
+    this.renderedComponent = this.renderComponent();
   }
-  get ref() {
-    var _a;
-    return (_a = this.editor.contentComponent) === null || _a === void 0 ? void 0 : _a.refs[this.id];
+  get element() {
+    return this.renderedComponent.el;
+  }
+  renderComponent() {
+    let vNode = h(this.component, this.props);
+    if (typeof document !== "undefined" && this.el) {
+      render(vNode, this.el);
+    }
+    const destroy = () => {
+      if (this.el) {
+        render(null, this.el);
+      }
+      this.el = null;
+      vNode = null;
+    };
+    return { vNode, destroy, el: this.el ? this.el.firstElementChild : null };
   }
   updateProps(props = {}) {
     Object.entries(props).forEach(([key, value]) => {
       this.props[key] = value;
     });
+    this.renderComponent();
   }
   destroy() {
-    this.editor.vueRenderers.delete(this.id);
+    this.renderedComponent.destroy();
   }
 };
 var nodeViewProps = {
@@ -3570,7 +3574,7 @@ var VueNodeView = class extends NodeView {
     });
   }
   get dom() {
-    if (!this.renderer.element.hasAttribute("data-node-view-wrapper")) {
+    if (!this.renderer.element || !this.renderer.element.hasAttribute("data-node-view-wrapper")) {
       throw Error("Please use the NodeViewWrapper component for your node view.");
     }
     return this.renderer.element;
@@ -3615,13 +3619,17 @@ var VueNodeView = class extends NodeView {
     this.renderer.updateProps({
       selected: true
     });
-    this.renderer.element.classList.add("ProseMirror-selectednode");
+    if (this.renderer.element) {
+      this.renderer.element.classList.add("ProseMirror-selectednode");
+    }
   }
   deselectNode() {
     this.renderer.updateProps({
       selected: false
     });
-    this.renderer.element.classList.remove("ProseMirror-selectednode");
+    if (this.renderer.element) {
+      this.renderer.element.classList.remove("ProseMirror-selectednode");
+    }
   }
   getDecorationClasses() {
     return this.decorations.map((item) => item.type.attrs.class).flat().join(" ");

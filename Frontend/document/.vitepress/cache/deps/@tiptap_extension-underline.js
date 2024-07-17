@@ -1,10 +1,10 @@
 import {
   Mark,
   mergeAttributes
-} from "./chunk-UI7E3QZO.js";
-import "./chunk-5WRI5ZAA.js";
+} from "./chunk-6HCLKSW4.js";
+import "./chunk-G3PMV62Z.js";
 
-// node_modules/.pnpm/@tiptap+extension-underline@2.4.0_@tiptap+core@2.4.0_@tiptap+pm@2.4.0_/node_modules/@tiptap/extension-underline/dist/index.js
+// node_modules/.pnpm/@tiptap+extension-underline@2.5.0_@tiptap+core@2.5.0_@tiptap+pm@2.5.0_/node_modules/@tiptap/extension-underline/dist/index.js
 var Underline = Mark.create({
   name: "underline",
   addOptions() {

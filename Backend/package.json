@@ -1,0 +1,24 @@
+{
+  "name": "Backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "app": "node app.js",
+    "json": "json-server data/db.json --port 4012",
+    "start": "concurrently \"node app.js\" \"pnpm json\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.19.2",
+    "body-parser": "^1.20.2",
+    "wechat": "^2.1.0",
+    "wechat-api": "^1.35.1",
+    "json-server": "^1.0.0-beta.1"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

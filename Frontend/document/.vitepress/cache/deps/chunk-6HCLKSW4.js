@@ -117,7 +117,7 @@ OrderedMap.from = function(value) {
 };
 var dist_default = OrderedMap;
 
-// node_modules/.pnpm/prosemirror-model@1.21.3/node_modules/prosemirror-model/dist/index.js
+// node_modules/.pnpm/prosemirror-model@1.22.1/node_modules/prosemirror-model/dist/index.js
 function findDiffStart(a, b, pos) {
   for (let i = 0; ; i++) {
     if (i == a.childCount || i == b.childCount)
@@ -584,7 +584,9 @@ var Mark = class _Mark {
     let type = schema.marks[json.type];
     if (!type)
       throw new RangeError(`There is no mark type ${json.type} in this schema`);
-    return type.create(json.attrs);
+    let mark = type.create(json.attrs);
+    type.checkAttrs(mark.attrs);
+    return mark;
   }
   /**
   Test whether two sets of marks are identical.
@@ -1489,13 +1491,17 @@ var Node = class _Node {
   }
   /**
   Check whether this node and its descendants conform to the
-  schema, and raise error when they do not.
+  schema, and raise an exception when they do not.
   */
   check() {
     this.type.checkContent(this.content);
+    this.type.checkAttrs(this.attrs);
     let copy2 = Mark.none;
-    for (let i = 0; i < this.marks.length; i++)
-      copy2 = this.marks[i].addToSet(copy2);
+    for (let i = 0; i < this.marks.length; i++) {
+      let mark = this.marks[i];
+      mark.type.checkAttrs(mark.attrs);
+      copy2 = mark.addToSet(copy2);
+    }
     if (!Mark.sameSet(copy2, this.marks))
       throw new RangeError(`Invalid collection of marks for node ${this.type.name}: ${this.marks.map((m) => m.type.name)}`);
     this.content.forEach((node) => node.check());
@@ -1533,7 +1539,9 @@ var Node = class _Node {
       return schema.text(json.text, marks);
     }
     let content = Fragment.fromJSON(schema, json.content);
-    return schema.nodeType(json.type).create(json.attrs, content, marks);
+    let node = schema.nodeType(json.type).create(json.attrs, content, marks);
+    node.type.checkAttrs(node.attrs);
+    return node;
   }
 };
 Node.prototype.text = void 0;
@@ -2015,6 +2023,16 @@ function computeAttrs(attrs, value) {
   }
   return built;
 }
+function checkAttrs(attrs, values, type, name) {
+  for (let name2 in values)
+    if (!(name2 in attrs))
+      throw new RangeError(`Unsupported attribute ${name2} for ${type} of type ${name2}`);
+  for (let name2 in attrs) {
+    let attr = attrs[name2];
+    if (attr.validate)
+      attr.validate(values[name2]);
+  }
+}
 function initAttrs(attrs) {
   let result = /* @__PURE__ */ Object.create(null);
   if (attrs)
@@ -2165,6 +2183,12 @@ var NodeType = class _NodeType {
       throw new RangeError(`Invalid content for node ${this.name}: ${content.toString().slice(0, 50)}`);
   }
   /**
+  @internal
+  */
+  checkAttrs(attrs) {
+    checkAttrs(this.attrs, attrs, "node", this.name);
+  }
+  /**
   Check whether the given mark type is allowed in this node.
   */
   allowsMarkType(markType) {
@@ -2214,10 +2238,19 @@ var NodeType = class _NodeType {
     return result;
   }
 };
+function validateType(type) {
+  let types = type.split("|");
+  return (value) => {
+    let name = value === null ? "null" : typeof value;
+    if (types.indexOf(name) < 0)
+      throw new RangeError(`Expected value of type ${types}, got ${name}`);
+  };
+}
 var Attribute = class {
   constructor(options) {
     this.hasDefault = Object.prototype.hasOwnProperty.call(options, "default");
     this.default = options.default;
+    this.validate = typeof options.validate == "string" ? validateType(options.validate) : options.validate;
   }
   get isRequired() {
     return !this.hasDefault;
@@ -2274,6 +2307,12 @@ var MarkType = class _MarkType {
     for (let i = 0; i < set.length; i++)
       if (set[i].type == this)
         return set[i];
+  }
+  /**
+  @internal
+  */
+  checkAttrs(attrs) {
+    checkAttrs(this.attrs, attrs, "mark", this.name);
   }
   /**
   Queries whether a given mark type is
@@ -3159,7 +3198,7 @@ var DOMSerializer = class _DOMSerializer {
   @internal
   */
   serializeNodeInner(node, options) {
-    let { dom, contentDOM } = _DOMSerializer.renderSpec(doc(options), this.nodes[node.type.name](node));
+    let { dom, contentDOM } = renderSpec(doc(options), this.nodes[node.type.name](node), null, node.attrs);
     if (contentDOM) {
       if (node.isLeaf)
         throw new RangeError("Content hole not allowed in a leaf node spec");
@@ -3190,7 +3229,7 @@ var DOMSerializer = class _DOMSerializer {
   */
   serializeMark(mark, inline, options = {}) {
     let toDOM = this.marks[mark.type.name];
-    return toDOM && _DOMSerializer.renderSpec(doc(options), toDOM(mark, inline));
+    return toDOM && renderSpec(doc(options), toDOM(mark, inline), null, mark.attrs);
   }
   /**
   Render an [output spec](https://prosemirror.net/docs/ref/#model.DOMOutputSpec) to a DOM node. If
@@ -3198,48 +3237,7 @@ var DOMSerializer = class _DOMSerializer {
   node with the hole.
   */
   static renderSpec(doc3, structure, xmlNS = null) {
-    if (typeof structure == "string")
-      return { dom: doc3.createTextNode(structure) };
-    if (structure.nodeType != null)
-      return { dom: structure };
-    if (structure.dom && structure.dom.nodeType != null)
-      return structure;
-    let tagName = structure[0], space = tagName.indexOf(" ");
-    if (space > 0) {
-      xmlNS = tagName.slice(0, space);
-      tagName = tagName.slice(space + 1);
-    }
-    let contentDOM;
-    let dom = xmlNS ? doc3.createElementNS(xmlNS, tagName) : doc3.createElement(tagName);
-    let attrs = structure[1], start = 1;
-    if (attrs && typeof attrs == "object" && attrs.nodeType == null && !Array.isArray(attrs)) {
-      start = 2;
-      for (let name in attrs)
-        if (attrs[name] != null) {
-          let space2 = name.indexOf(" ");
-          if (space2 > 0)
-            dom.setAttributeNS(name.slice(0, space2), name.slice(space2 + 1), attrs[name]);
-          else
-            dom.setAttribute(name, attrs[name]);
-        }
-    }
-    for (let i = start; i < structure.length; i++) {
-      let child = structure[i];
-      if (child === 0) {
-        if (i < structure.length - 1 || i > start)
-          throw new RangeError("Content hole must be the only child of its parent node");
-        return { dom, contentDOM: dom };
-      } else {
-        let { dom: inner, contentDOM: innerContent } = _DOMSerializer.renderSpec(doc3, child, xmlNS);
-        dom.appendChild(inner);
-        if (innerContent) {
-          if (contentDOM)
-            throw new RangeError("Multiple content holes");
-          contentDOM = innerContent;
-        }
-      }
-    }
-    return { dom, contentDOM };
+    return renderSpec(doc3, structure, xmlNS);
   }
   /**
   Build a serializer using the [`toDOM`](https://prosemirror.net/docs/ref/#model.NodeSpec.toDOM)
@@ -3276,6 +3274,84 @@ function gatherToDOM(obj) {
 }
 function doc(options) {
   return options.document || window.document;
+}
+var suspiciousAttributeCache = /* @__PURE__ */ new WeakMap();
+function suspiciousAttributes(attrs) {
+  let value = suspiciousAttributeCache.get(attrs);
+  if (value === void 0)
+    suspiciousAttributeCache.set(attrs, value = suspiciousAttributesInner(attrs));
+  return value;
+}
+function suspiciousAttributesInner(attrs) {
+  let result = null;
+  function scan(value) {
+    if (value && typeof value == "object") {
+      if (Array.isArray(value)) {
+        if (typeof value[0] == "string") {
+          if (!result)
+            result = [];
+          result.push(value);
+        } else {
+          for (let i = 0; i < value.length; i++)
+            scan(value[i]);
+        }
+      } else {
+        for (let prop in value)
+          scan(value[prop]);
+      }
+    }
+  }
+  scan(attrs);
+  return result;
+}
+function renderSpec(doc3, structure, xmlNS, blockArraysIn) {
+  if (typeof structure == "string")
+    return { dom: doc3.createTextNode(structure) };
+  if (structure.nodeType != null)
+    return { dom: structure };
+  if (structure.dom && structure.dom.nodeType != null)
+    return structure;
+  let tagName = structure[0], suspicious;
+  if (typeof tagName != "string")
+    throw new RangeError("Invalid array passed to renderSpec");
+  if (blockArraysIn && (suspicious = suspiciousAttributes(blockArraysIn)) && suspicious.indexOf(structure) > -1)
+    throw new RangeError("Using an array from an attribute object as a DOM spec. This may be an attempted cross site scripting attack.");
+  let space = tagName.indexOf(" ");
+  if (space > 0) {
+    xmlNS = tagName.slice(0, space);
+    tagName = tagName.slice(space + 1);
+  }
+  let contentDOM;
+  let dom = xmlNS ? doc3.createElementNS(xmlNS, tagName) : doc3.createElement(tagName);
+  let attrs = structure[1], start = 1;
+  if (attrs && typeof attrs == "object" && attrs.nodeType == null && !Array.isArray(attrs)) {
+    start = 2;
+    for (let name in attrs)
+      if (attrs[name] != null) {
+        let space2 = name.indexOf(" ");
+        if (space2 > 0)
+          dom.setAttributeNS(name.slice(0, space2), name.slice(space2 + 1), attrs[name]);
+        else
+          dom.setAttribute(name, attrs[name]);
+      }
+  }
+  for (let i = start; i < structure.length; i++) {
+    let child = structure[i];
+    if (child === 0) {
+      if (i < structure.length - 1 || i > start)
+        throw new RangeError("Content hole must be the only child of its parent node");
+      return { dom, contentDOM: dom };
+    } else {
+      let { dom: inner, contentDOM: innerContent } = renderSpec(doc3, child, xmlNS, blockArraysIn);
+      dom.appendChild(inner);
+      if (innerContent) {
+        if (contentDOM)
+          throw new RangeError("Multiple content holes");
+        contentDOM = innerContent;
+      }
+    }
+  }
+  return { dom, contentDOM };
 }
 
 // node_modules/.pnpm/prosemirror-transform@1.9.0/node_modules/prosemirror-transform/dist/index.js
@@ -11726,7 +11802,7 @@ for (let key in pcBaseKeymap)
   macBaseKeymap[key] = pcBaseKeymap[key];
 var mac4 = typeof navigator != "undefined" ? /Mac|iP(hone|[oa]d)/.test(navigator.platform) : typeof os != "undefined" && os.platform ? os.platform() == "darwin" : false;
 
-// node_modules/.pnpm/prosemirror-schema-list@1.4.0/node_modules/prosemirror-schema-list/dist/index.js
+// node_modules/.pnpm/prosemirror-schema-list@1.4.1/node_modules/prosemirror-schema-list/dist/index.js
 function wrapInList(listType, attrs = null) {
   return function(state, dispatch) {
     let { $from, $to } = state.selection;
@@ -11841,7 +11917,7 @@ function sinkListItem(itemType) {
   };
 }
 
-// node_modules/.pnpm/@tiptap+core@2.4.0_@tiptap+pm@2.4.0/node_modules/@tiptap/core/dist/index.js
+// node_modules/.pnpm/@tiptap+core@2.5.0_@tiptap+pm@2.5.0/node_modules/@tiptap/core/dist/index.js
 function createChainableState(config) {
   const { state, transaction } = config;
   let { selection } = transaction;
@@ -12040,7 +12116,8 @@ function getAttributesFromExtensions(extensions) {
     const context = {
       name: extension.name,
       options: extension.options,
-      storage: extension.storage
+      storage: extension.storage,
+      extensions: nodeAndMarkExtensions
     };
     const addGlobalAttributes = getExtensionField(extension, "addGlobalAttributes", context);
     if (!addGlobalAttributes) {
@@ -12166,7 +12243,7 @@ function fromString(value) {
   return value;
 }
 function injectExtensionAttributesToParseRule(parseRule, extensionAttributes) {
-  if (parseRule.style) {
+  if ("style" in parseRule) {
     return parseRule;
   }
   return {
@@ -12231,6 +12308,7 @@ function getSchemaByResolvedExtensions(extensions, editor) {
       selectable: callOrReturn(getExtensionField(extension, "selectable", context)),
       draggable: callOrReturn(getExtensionField(extension, "draggable", context)),
       code: callOrReturn(getExtensionField(extension, "code", context)),
+      whitespace: callOrReturn(getExtensionField(extension, "whitespace", context)),
       defining: callOrReturn(getExtensionField(extension, "defining", context)),
       isolating: callOrReturn(getExtensionField(extension, "isolating", context)),
       attrs: Object.fromEntries(extensionAttributes.map((extensionAttribute) => {
@@ -12786,7 +12864,7 @@ var ExtensionManager = class _ExtensionManager {
       const plugins = [];
       const addKeyboardShortcuts = getExtensionField(extension, "addKeyboardShortcuts", context);
       let defaultBindings = {};
-      if (extension.type === "mark" && extension.config.exitable) {
+      if (extension.type === "mark" && getExtensionField(extension, "exitable", context)) {
         defaultBindings.ArrowRight = () => Mark2.handleExit({ editor, mark: extension });
       }
       if (addKeyboardShortcuts) {
@@ -12934,14 +13012,10 @@ function mergeDeep(target, source) {
   const output = { ...target };
   if (isPlainObject(target) && isPlainObject(source)) {
     Object.keys(source).forEach((key) => {
-      if (isPlainObject(source[key])) {
-        if (!(key in target)) {
-          Object.assign(output, { [key]: source[key] });
-        } else {
-          output[key] = mergeDeep(target[key], source[key]);
-        }
+      if (isPlainObject(source[key]) && isPlainObject(target[key])) {
+        output[key] = mergeDeep(target[key], source[key]);
       } else {
-        Object.assign(output, { [key]: source[key] });
+        output[key] = source[key];
       }
     });
   }
@@ -12980,13 +13054,15 @@ var Extension = class _Extension {
     return new _Extension(config);
   }
   configure(options = {}) {
-    const extension = this.extend();
+    const extension = this.extend({
+      ...this.config,
+      addOptions() {
+        var _a;
+        return mergeDeep(((_a = this.parent) === null || _a === void 0 ? void 0 : _a.call(this)) || {}, options);
+      }
+    });
+    extension.name = this.name;
     extension.parent = this.parent;
-    extension.options = mergeDeep(this.options, options);
-    extension.storage = callOrReturn(getExtensionField(extension, "addStorage", {
-      name: extension.name,
-      options: extension.options
-    }));
     return extension;
   }
   extend(extendedConfig = {}) {
@@ -12994,7 +13070,7 @@ var Extension = class _Extension {
     extension.parent = this;
     this.child = extension;
     extension.name = extendedConfig.name ? extendedConfig.name : extension.parent.name;
-    if (extendedConfig.defaultOptions) {
+    if (extendedConfig.defaultOptions && Object.keys(extendedConfig.defaultOptions).length > 0) {
       console.warn(`[tiptap warn]: BREAKING CHANGE: "defaultOptions" is deprecated. Please use "addOptions" instead. Found in extension: "${extension.name}".`);
     }
     extension.options = callOrReturn(getExtensionField(extension, "addOptions", {
@@ -13378,13 +13454,47 @@ function createNodeFromContent(content, schema, options) {
       }
       return schema.nodeFromJSON(content);
     } catch (error) {
+      if (options.errorOnInvalidContent) {
+        throw new Error("[tiptap error]: Invalid JSON content", { cause: error });
+      }
       console.warn("[tiptap warn]: Invalid content.", "Passed value:", content, "Error:", error);
       return createNodeFromContent("", schema, options);
     }
   }
   if (isTextContent) {
-    const parser = DOMParser.fromSchema(schema);
-    return options.slice ? parser.parseSlice(elementFromString(content), options.parseOptions).content : parser.parse(elementFromString(content), options.parseOptions);
+    let schemaToUse = schema;
+    let hasInvalidContent = false;
+    let invalidContent = "";
+    if (options.errorOnInvalidContent) {
+      schemaToUse = new Schema({
+        topNode: schema.spec.topNode,
+        marks: schema.spec.marks,
+        // Prosemirror's schemas are executed such that: the last to execute, matches last
+        // This means that we can add a catch-all node at the end of the schema to catch any content that we don't know how to handle
+        nodes: schema.spec.nodes.append({
+          __tiptap__private__unknown__catch__all__node: {
+            content: "inline*",
+            group: "block",
+            parseDOM: [
+              {
+                tag: "*",
+                getAttrs: (e) => {
+                  hasInvalidContent = true;
+                  invalidContent = typeof e === "string" ? e : e.outerHTML;
+                  return null;
+                }
+              }
+            ]
+          }
+        })
+      });
+    }
+    const parser = DOMParser.fromSchema(schemaToUse);
+    const response = options.slice ? parser.parseSlice(elementFromString(content), options.parseOptions).content : parser.parse(elementFromString(content), options.parseOptions);
+    if (options.errorOnInvalidContent && hasInvalidContent) {
+      throw new Error("[tiptap error]: Invalid HTML content", { cause: new Error(`Invalid element found: ${invalidContent}`) });
+    }
+    return response;
   }
   return createNodeFromContent("", schema, options);
 }
@@ -13407,9 +13517,10 @@ function selectionToInsertionEnd2(tr, startLen, bias) {
   tr.setSelection(Selection.near(tr.doc.resolve(end), bias));
 }
 var isFragment = (nodeOrFragment) => {
-  return nodeOrFragment.toString().startsWith("<");
+  return !("type" in nodeOrFragment);
 };
 var insertContentAt = (position, value, options) => ({ tr, dispatch, editor }) => {
+  var _a;
   if (dispatch) {
     options = {
       parseOptions: {},
@@ -13418,14 +13529,17 @@ var insertContentAt = (position, value, options) => ({ tr, dispatch, editor }) =
       applyPasteRules: false,
       ...options
     };
-    const content = createNodeFromContent(value, editor.schema, {
-      parseOptions: {
-        preserveWhitespace: "full",
-        ...options.parseOptions
-      }
-    });
-    if (content.toString() === "<>") {
-      return true;
+    let content;
+    try {
+      content = createNodeFromContent(value, editor.schema, {
+        parseOptions: {
+          preserveWhitespace: "full",
+          ...options.parseOptions
+        },
+        errorOnInvalidContent: (_a = options.errorOnInvalidContent) !== null && _a !== void 0 ? _a : editor.options.enableContentCheck
+      });
+    } catch (e) {
+      return false;
     }
     let { from, to } = typeof position === "number" ? { from: position, to: position } : { from: position.from, to: position.to };
     let isOnlyTextContent = true;
@@ -13482,7 +13596,7 @@ var joinBackward2 = () => ({ state, dispatch }) => {
 var joinForward2 = () => ({ state, dispatch }) => {
   return joinForward(state, dispatch);
 };
-var joinItemBackward = () => ({ tr, state, dispatch }) => {
+var joinItemBackward = () => ({ state, dispatch, tr }) => {
   try {
     const point = joinPoint(state.doc, state.selection.$from.pos, -1);
     if (point === null || point === void 0) {
@@ -13493,7 +13607,7 @@ var joinItemBackward = () => ({ tr, state, dispatch }) => {
       dispatch(tr);
     }
     return true;
-  } catch {
+  } catch (e) {
     return false;
   }
 };
@@ -13711,16 +13825,32 @@ var selectTextblockEnd2 = () => ({ state, dispatch }) => {
 var selectTextblockStart2 = () => ({ state, dispatch }) => {
   return selectTextblockStart(state, dispatch);
 };
-function createDocument(content, schema, parseOptions = {}) {
-  return createNodeFromContent(content, schema, { slice: false, parseOptions });
+function createDocument(content, schema, parseOptions = {}, options = {}) {
+  return createNodeFromContent(content, schema, {
+    slice: false,
+    parseOptions,
+    errorOnInvalidContent: options.errorOnInvalidContent
+  });
 }
-var setContent = (content, emitUpdate = false, parseOptions = {}) => ({ tr, editor, dispatch }) => {
+var setContent = (content, emitUpdate = false, parseOptions = {}, options = {}) => ({ editor, tr, dispatch, commands: commands2 }) => {
+  var _a, _b;
   const { doc: doc3 } = tr;
-  const document2 = createDocument(content, editor.schema, parseOptions);
-  if (dispatch) {
-    tr.replaceWith(0, doc3.content.size, document2).setMeta("preventUpdate", !emitUpdate);
+  if (parseOptions.preserveWhitespace !== "full") {
+    const document2 = createDocument(content, editor.schema, parseOptions, {
+      errorOnInvalidContent: (_a = options.errorOnInvalidContent) !== null && _a !== void 0 ? _a : editor.options.enableContentCheck
+    });
+    if (dispatch) {
+      tr.replaceWith(0, doc3.content.size, document2).setMeta("preventUpdate", !emitUpdate);
+    }
+    return true;
   }
-  return true;
+  if (dispatch) {
+    tr.setMeta("preventUpdate", !emitUpdate);
+  }
+  return commands2.insertContentAt({ from: 0, to: doc3.content.size }, content, {
+    parseOptions,
+    errorOnInvalidContent: (_b = options.errorOnInvalidContent) !== null && _b !== void 0 ? _b : editor.options.enableContentCheck
+  });
 };
 function getMarkAttributes(state, typeOrName) {
   const type = getMarkType(typeOrName, state.schema);
@@ -14110,10 +14240,11 @@ function isList(name, extensions) {
   return group.split(" ").includes("list");
 }
 function isNodeEmpty(node) {
-  var _a;
-  const defaultContent = (_a = node.type.createAndFill()) === null || _a === void 0 ? void 0 : _a.toJSON();
-  const content = node.toJSON();
-  return JSON.stringify(defaultContent) === JSON.stringify(content);
+  const defaultContent = node.type.createAndFill();
+  if (!defaultContent) {
+    return false;
+  }
+  return node.eq(defaultContent);
 }
 function isNodeSelection(value) {
   return value instanceof NodeSelection;
@@ -14628,14 +14759,14 @@ var commands = Object.freeze({
   forEach,
   insertContent,
   insertContentAt,
-  joinUp: joinUp2,
-  joinDown: joinDown2,
   joinBackward: joinBackward2,
+  joinDown: joinDown2,
   joinForward: joinForward2,
   joinItemBackward,
   joinItemForward,
   joinTextblockBackward: joinTextblockBackward2,
   joinTextblockForward: joinTextblockForward2,
+  joinUp: joinUp2,
   keyboardShortcut,
   lift: lift3,
   liftEmptyBlock: liftEmptyBlock2,
@@ -14832,7 +14963,7 @@ var Tabindex = Extension.create({
       new Plugin({
         key: new PluginKey("tabindex"),
         props: {
-          attributes: this.editor.isEditable ? { tabindex: "0" } : {}
+          attributes: () => this.editor.isEditable ? { tabindex: "0" } : {}
         }
       })
     ];
@@ -14848,6 +14979,9 @@ var index = Object.freeze({
   Tabindex
 });
 var NodePos = class _NodePos {
+  get name() {
+    return this.node.type.name;
+  }
   constructor(pos, editor, isBlock = false, node = null) {
     this.currentNode = null;
     this.actualDepth = null;
@@ -14855,9 +14989,6 @@ var NodePos = class _NodePos {
     this.resolvedPos = pos;
     this.editor = editor;
     this.currentNode = node;
-  }
-  get name() {
-    return this.node.type.name;
   }
   get node() {
     return this.currentNode || this.resolvedPos.node();
@@ -15122,6 +15253,7 @@ var Editor = class extends EventEmitter {
       enableInputRules: true,
       enablePasteRules: true,
       enableCoreExtensions: true,
+      enableContentCheck: false,
       onBeforeCreate: () => null,
       onCreate: () => null,
       onUpdate: () => null,
@@ -15129,7 +15261,10 @@ var Editor = class extends EventEmitter {
       onTransaction: () => null,
       onFocus: () => null,
       onBlur: () => null,
-      onDestroy: () => null
+      onDestroy: () => null,
+      onContentError: ({ error }) => {
+        throw error;
+      }
     };
     this.isCapturingTransaction = false;
     this.capturedTransaction = null;
@@ -15139,6 +15274,7 @@ var Editor = class extends EventEmitter {
     this.createSchema();
     this.on("beforeCreate", this.options.onBeforeCreate);
     this.emit("beforeCreate", { editor: this });
+    this.on("contentError", this.options.onContentError);
     this.createView();
     this.injectCSS();
     this.on("create", this.options.onCreate);
@@ -15292,7 +15428,23 @@ var Editor = class extends EventEmitter {
    * Creates a ProseMirror view.
    */
   createView() {
-    const doc3 = createDocument(this.options.content, this.schema, this.options.parseOptions);
+    let doc3;
+    try {
+      doc3 = createDocument(this.options.content, this.schema, this.options.parseOptions, { errorOnInvalidContent: this.options.enableContentCheck });
+    } catch (e) {
+      if (!(e instanceof Error) || !["[tiptap error]: Invalid JSON content", "[tiptap error]: Invalid HTML content"].includes(e.message)) {
+        throw e;
+      }
+      this.emit("contentError", {
+        editor: this,
+        error: e,
+        disableCollaboration: () => {
+          this.options.extensions = this.options.extensions.filter((extension) => extension.name !== "collaboration");
+          this.createExtensionManager();
+        }
+      });
+      doc3 = createDocument(this.options.content, this.schema, this.options.parseOptions, { errorOnInvalidContent: false });
+    }
     const selection = resolveFocusPosition(doc3, this.options.autofocus);
     this.view = new EditorView(this.options.element, {
       ...this.options.editorProps,
@@ -15355,6 +15507,11 @@ var Editor = class extends EventEmitter {
     }
     const state = this.state.apply(transaction);
     const selectionHasChanged = !this.state.selection.eq(state.selection);
+    this.emit("beforeTransaction", {
+      editor: this,
+      transaction,
+      nextState: state
+    });
     this.view.updateState(state);
     this.emit("transaction", {
       editor: this,
@@ -15530,7 +15687,8 @@ function nodeInputRule(config) {
         tr.insertText(lastChar, start + match[0].length - 1);
         tr.replaceWith(matchStart, end, newNode);
       } else if (match[0]) {
-        tr.insert(start - 1, config.type.create(attributes)).delete(tr.mapping.map(start), tr.mapping.map(end));
+        const insertionStart = config.type.isInline ? start : start - 1;
+        tr.insert(insertionStart, config.type.create(attributes)).delete(tr.mapping.map(start), tr.mapping.map(end));
       }
       tr.scrollIntoView();
     }
@@ -15636,20 +15794,23 @@ var Mark2 = class _Mark {
     return new _Mark(config);
   }
   configure(options = {}) {
-    const extension = this.extend();
-    extension.options = mergeDeep(this.options, options);
-    extension.storage = callOrReturn(getExtensionField(extension, "addStorage", {
-      name: extension.name,
-      options: extension.options
-    }));
+    const extension = this.extend({
+      ...this.config,
+      addOptions() {
+        var _a;
+        return mergeDeep(((_a = this.parent) === null || _a === void 0 ? void 0 : _a.call(this)) || {}, options);
+      }
+    });
+    extension.name = this.name;
+    extension.parent = this.parent;
     return extension;
   }
   extend(extendedConfig = {}) {
-    const extension = new _Mark({ ...this.config, ...extendedConfig });
+    const extension = new _Mark(extendedConfig);
     extension.parent = this;
     this.child = extension;
     extension.name = extendedConfig.name ? extendedConfig.name : extension.parent.name;
-    if (extendedConfig.defaultOptions) {
+    if (extendedConfig.defaultOptions && Object.keys(extendedConfig.defaultOptions).length > 0) {
       console.warn(`[tiptap warn]: BREAKING CHANGE: "defaultOptions" is deprecated. Please use "addOptions" instead. Found in extension: "${extension.name}".`);
     }
     extension.options = callOrReturn(getExtensionField(extension, "addOptions", {
@@ -15715,20 +15876,23 @@ var Node2 = class _Node {
     return new _Node(config);
   }
   configure(options = {}) {
-    const extension = this.extend();
-    extension.options = mergeDeep(this.options, options);
-    extension.storage = callOrReturn(getExtensionField(extension, "addStorage", {
-      name: extension.name,
-      options: extension.options
-    }));
+    const extension = this.extend({
+      ...this.config,
+      addOptions() {
+        var _a;
+        return mergeDeep(((_a = this.parent) === null || _a === void 0 ? void 0 : _a.call(this)) || {}, options);
+      }
+    });
+    extension.name = this.name;
+    extension.parent = this.parent;
     return extension;
   }
   extend(extendedConfig = {}) {
-    const extension = new _Node({ ...this.config, ...extendedConfig });
+    const extension = new _Node(extendedConfig);
     extension.parent = this;
     this.child = extension;
     extension.name = extendedConfig.name ? extendedConfig.name : extension.parent.name;
-    if (extendedConfig.defaultOptions) {
+    if (extendedConfig.defaultOptions && Object.keys(extendedConfig.defaultOptions).length > 0) {
       console.warn(`[tiptap warn]: BREAKING CHANGE: "defaultOptions" is deprecated. Please use "addOptions" instead. Found in extension: "${extension.name}".`);
     }
     extension.options = callOrReturn(getExtensionField(extension, "addOptions", {
@@ -16099,4 +16263,4 @@ export {
   textPasteRule,
   Tracker
 };
-//# sourceMappingURL=chunk-UI7E3QZO.js.map
+//# sourceMappingURL=chunk-6HCLKSW4.js.map

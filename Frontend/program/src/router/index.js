@@ -49,6 +49,15 @@ const router = createRouter({
           }
         },
         {
+          path: 'text2',
+          name: 'text2',
+          component: () => import('@/views/manage/text2.vue'),
+          meta: {
+            title: "测试",
+            icon: 'face',
+          }
+        },
+        {
           path: '/about2',
           name: 'about2',
           component: () => import('@/layouts/components/About/index2.vue'),

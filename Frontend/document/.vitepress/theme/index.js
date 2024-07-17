@@ -1,15 +1,16 @@
 import { h } from 'vue'
-import pinia from '../store/store.js'
+import { createPinia } from 'pinia';
+// import { createPersistPlugin } from '../utils/piniaPersistenceStorage.js'; // 引入持久化插件
+
+import { generateEnhancedFingerprint } from '../utils/fingerprint.js'
+
 import DefaultTheme from 'vitepress/theme'
-import ElementPlus from 'element-plus'// 引入 'element-plus
+import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
-
 import Editor from './components/editor/Editor.vue'
-
-import VueQrcode from 'vue-qrcode' // 导入二维码插件
-
-import Index from './components/index.vue' // 自定义组件
+import VueQrcode from 'vue-qrcode'
+// import Index from './components/index.vue'
 import ClipboardLayout from './components/Clipboard/Layout.vue'
 import ClipboardLayoutQuery from './components/Clipboard/LayoutQuery.vue'
 import FooterInfo from './components/Clipboard/FooterInfo.vue'
@@ -24,6 +25,9 @@ import tests from './components/test.vue'
 
 import './style.css'
 
+const pinia = createPinia();
+// pinia.use(createPersistPlugin({ key: 'pinia' })); // 使用持久化插件
+
 /** @type {import('vitepress').Theme} */
 export default {
   extends: DefaultTheme,
@@ -33,22 +37,14 @@ export default {
     })
   },
   enhanceApp({ app, router, siteData }) {
-    app.use(pinia)
-    // 使用 Element Plus
+    app.use(pinia);
     app.use(ElementPlus)
-    // 注册 Element Plus 图标
     for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
       app.component(key, component)
     }
-
-    // 二维码
     app.component('vue-qrcode', VueQrcode)
-
-    // Editor
     app.component('Editor', Editor)
-
-    // 注册自定义组件
-    app.component('Index', Index)
+    // app.component('Index', Index)
     app.component('ClipboardLayout', ClipboardLayout)
     app.component('ClipboardLayoutQuery', ClipboardLayoutQuery)
     app.component('FooterInfo', FooterInfo)

@@ -2,9 +2,9 @@ import {
   Node,
   mergeAttributes,
   textblockTypeInputRule
-} from "./chunk-UI7E3QZO.js";
+} from "./chunk-6HCLKSW4.js";
 
-// node_modules/.pnpm/@tiptap+extension-heading@2.4.0_@tiptap+core@2.4.0_@tiptap+pm@2.4.0_/node_modules/@tiptap/extension-heading/dist/index.js
+// node_modules/.pnpm/@tiptap+extension-heading@2.5.0_@tiptap+core@2.5.0_@tiptap+pm@2.5.0_/node_modules/@tiptap/extension-heading/dist/index.js
 var Heading = Node.create({
   name: "heading",
   addOptions() {
@@ -75,4 +75,4 @@ var Heading = Node.create({
 export {
   Heading
 };
-//# sourceMappingURL=chunk-K7D6YXZJ.js.map
+//# sourceMappingURL=chunk-WNUZYCHJ.js.map

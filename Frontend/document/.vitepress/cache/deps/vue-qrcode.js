@@ -3,11 +3,11 @@ import {
   h,
   ref,
   watch
-} from "./chunk-32T6PNAD.js";
+} from "./chunk-IJ77GX6U.js";
 import {
   __commonJS,
   __toESM
-} from "./chunk-5WRI5ZAA.js";
+} from "./chunk-G3PMV62Z.js";
 
 // node_modules/.pnpm/qrcode@1.5.3/node_modules/qrcode/lib/can-promise.js
 var require_can_promise = __commonJS({
@@ -2132,7 +2132,7 @@ var require_browser = __commonJS({
   }
 });
 
-// node_modules/.pnpm/vue-qrcode@2.2.2_qrcode@1.5.3_vue@3.4.29/node_modules/vue-qrcode/lib/index.esm.mjs
+// node_modules/.pnpm/vue-qrcode@2.2.2_qrcode@1.5.3_vue@3.4.31/node_modules/vue-qrcode/lib/index.esm.mjs
 var import_qrcode = __toESM(require_browser(), 1);
 var __defProp = Object.defineProperty;
 var __defProps = Object.defineProperties;

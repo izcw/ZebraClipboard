@@ -1,6 +1,6 @@
 import {
   Heading
-} from "./chunk-K7D6YXZJ.js";
+} from "./chunk-WNUZYCHJ.js";
 import {
   Decoration,
   DecorationSet,
@@ -19,6 +19,7 @@ import {
   dropPoint,
   getExtensionField,
   getMarkAttributes,
+  isNodeSelection,
   keydownHandler,
   markInputRule,
   markPasteRule,
@@ -26,10 +27,10 @@ import {
   nodeInputRule,
   textblockTypeInputRule,
   wrappingInputRule
-} from "./chunk-UI7E3QZO.js";
-import "./chunk-5WRI5ZAA.js";
+} from "./chunk-6HCLKSW4.js";
+import "./chunk-G3PMV62Z.js";
 
-// node_modules/.pnpm/@tiptap+extension-blockquote@2.4.0_@tiptap+core@2.4.0_@tiptap+pm@2.4.0_/node_modules/@tiptap/extension-blockquote/dist/index.js
+// node_modules/.pnpm/@tiptap+extension-blockquote@2.5.0_@tiptap+core@2.5.0_@tiptap+pm@2.5.0_/node_modules/@tiptap/extension-blockquote/dist/index.js
 var inputRegex = /^\s*>\s$/;
 var Blockquote = Node.create({
   name: "blockquote",
@@ -77,7 +78,7 @@ var Blockquote = Node.create({
   }
 });
 
-// node_modules/.pnpm/@tiptap+extension-bold@2.4.0_@tiptap+core@2.4.0_@tiptap+pm@2.4.0_/node_modules/@tiptap/extension-bold/dist/index.js
+// node_modules/.pnpm/@tiptap+extension-bold@2.5.0_@tiptap+core@2.5.0_@tiptap+pm@2.5.0_/node_modules/@tiptap/extension-bold/dist/index.js
 var starInputRegex = /(?:^|\s)(\*\*(?!\s+\*\*)((?:[^*]+))\*\*(?!\s+\*\*))$/;
 var starPasteRegex = /(?:^|\s)(\*\*(?!\s+\*\*)((?:[^*]+))\*\*(?!\s+\*\*))/g;
 var underscoreInputRegex = /(?:^|\s)(__(?!\s+__)((?:[^_]+))__(?!\s+__))$/;
@@ -152,7 +153,7 @@ var Bold = Mark.create({
   }
 });
 
-// node_modules/.pnpm/@tiptap+extension-bullet-list@2.4.0_@tiptap+core@2.4.0_@tiptap+pm@2.4.0_/node_modules/@tiptap/extension-bullet-list/dist/index.js
+// node_modules/.pnpm/@tiptap+extension-bullet-list@2.5.0_@tiptap+core@2.5.0_@tiptap+pm@2.5.0_/node_modules/@tiptap/extension-bullet-list/dist/index.js
 var ListItem = Node.create({
   name: "listItem",
   addOptions() {
@@ -280,7 +281,7 @@ var BulletList = Node.create({
   }
 });
 
-// node_modules/.pnpm/@tiptap+extension-code@2.4.0_@tiptap+core@2.4.0_@tiptap+pm@2.4.0_/node_modules/@tiptap/extension-code/dist/index.js
+// node_modules/.pnpm/@tiptap+extension-code@2.5.0_@tiptap+core@2.5.0_@tiptap+pm@2.5.0_/node_modules/@tiptap/extension-code/dist/index.js
 var inputRegex3 = /(?:^|\s)(`(?!\s+`)((?:[^`]+))`(?!\s+`))$/;
 var pasteRegex = /(?:^|\s)(`(?!\s+`)((?:[^`]+))`(?!\s+`))/g;
 var Code = Mark.create({
@@ -337,7 +338,7 @@ var Code = Mark.create({
   }
 });
 
-// node_modules/.pnpm/@tiptap+extension-code-block@2.4.0_@tiptap+core@2.4.0_@tiptap+pm@2.4.0__@tiptap+pm@2.4.0/node_modules/@tiptap/extension-code-block/dist/index.js
+// node_modules/.pnpm/@tiptap+extension-code-block@2.5.0_@tiptap+core@2.5.0_@tiptap+pm@2.5.0__@tiptap+pm@2.5.0/node_modules/@tiptap/extension-code-block/dist/index.js
 var backtickInputRegex = /^```([a-z]+)?[\s\n]$/;
 var tildeInputRegex = /^~~~([a-z]+)?[\s\n]$/;
 var CodeBlock = Node.create({
@@ -507,14 +508,12 @@ var CodeBlock = Node.create({
             if (!text || !language) {
               return false;
             }
-            const { tr } = view.state;
-            if (view.state.selection.from === view.state.doc.nodeSize - (1 + view.state.selection.$to.depth * 2)) {
-              tr.insert(view.state.selection.from - 1, this.type.create({ language }));
-            } else {
-              tr.replaceSelectionWith(this.type.create({ language }));
+            const { tr, schema } = view.state;
+            const textNode = schema.text(text.replace(/\r\n?/g, "\n"));
+            tr.replaceSelectionWith(this.type.create({ language }, textNode));
+            if (tr.selection.$from.parent.type !== this.type) {
+              tr.setSelection(TextSelection.near(tr.doc.resolve(Math.max(0, tr.selection.from - 2))));
             }
-            tr.setSelection(TextSelection.near(tr.doc.resolve(Math.max(0, tr.selection.from - 2))));
-            tr.insertText(text.replace(/\r\n?/g, "\n"));
             tr.setMeta("paste", true);
             view.dispatch(tr);
             return true;
@@ -525,7 +524,7 @@ var CodeBlock = Node.create({
   }
 });
 
-// node_modules/.pnpm/@tiptap+extension-document@2.4.0_@tiptap+core@2.4.0_@tiptap+pm@2.4.0_/node_modules/@tiptap/extension-document/dist/index.js
+// node_modules/.pnpm/@tiptap+extension-document@2.5.0_@tiptap+core@2.5.0_@tiptap+pm@2.5.0_/node_modules/@tiptap/extension-document/dist/index.js
 var Document = Node.create({
   name: "doc",
   topNode: true,
@@ -660,7 +659,7 @@ var DropCursorView = class {
   }
 };
 
-// node_modules/.pnpm/@tiptap+extension-dropcursor@2.4.0_@tiptap+core@2.4.0_@tiptap+pm@2.4.0__@tiptap+pm@2.4.0/node_modules/@tiptap/extension-dropcursor/dist/index.js
+// node_modules/.pnpm/@tiptap+extension-dropcursor@2.5.0_@tiptap+core@2.5.0_@tiptap+pm@2.5.0__@tiptap+pm@2.5.0/node_modules/@tiptap/extension-dropcursor/dist/index.js
 var Dropcursor = Extension.create({
   name: "dropCursor",
   addOptions() {
@@ -888,7 +887,7 @@ function drawGapCursor(state) {
   return DecorationSet.create(state.doc, [Decoration.widget(state.selection.head, node, { key: "gapcursor" })]);
 }
 
-// node_modules/.pnpm/@tiptap+extension-gapcursor@2.4.0_@tiptap+core@2.4.0_@tiptap+pm@2.4.0__@tiptap+pm@2.4.0/node_modules/@tiptap/extension-gapcursor/dist/index.js
+// node_modules/.pnpm/@tiptap+extension-gapcursor@2.5.0_@tiptap+core@2.5.0_@tiptap+pm@2.5.0__@tiptap+pm@2.5.0/node_modules/@tiptap/extension-gapcursor/dist/index.js
 var Gapcursor = Extension.create({
   name: "gapCursor",
   addProseMirrorPlugins() {
@@ -909,7 +908,7 @@ var Gapcursor = Extension.create({
   }
 });
 
-// node_modules/.pnpm/@tiptap+extension-hard-break@2.4.0_@tiptap+core@2.4.0_@tiptap+pm@2.4.0_/node_modules/@tiptap/extension-hard-break/dist/index.js
+// node_modules/.pnpm/@tiptap+extension-hard-break@2.5.0_@tiptap+core@2.5.0_@tiptap+pm@2.5.0_/node_modules/@tiptap/extension-hard-break/dist/index.js
 var HardBreak = Node.create({
   name: "hardBreak",
   addOptions() {
@@ -1501,7 +1500,7 @@ var redo = buildCommand(true, true);
 var undoNoScroll = buildCommand(false, false);
 var redoNoScroll = buildCommand(true, false);
 
-// node_modules/.pnpm/@tiptap+extension-history@2.4.0_@tiptap+core@2.4.0_@tiptap+pm@2.4.0__@tiptap+pm@2.4.0/node_modules/@tiptap/extension-history/dist/index.js
+// node_modules/.pnpm/@tiptap+extension-history@2.5.0_@tiptap+core@2.5.0_@tiptap+pm@2.5.0__@tiptap+pm@2.5.0/node_modules/@tiptap/extension-history/dist/index.js
 var History = Extension.create({
   name: "history",
   addOptions() {
@@ -1537,7 +1536,7 @@ var History = Extension.create({
   }
 });
 
-// node_modules/.pnpm/@tiptap+extension-horizontal-rule@2.4.0_@tiptap+core@2.4.0_@tiptap+pm@2.4.0__@tiptap+pm@2.4.0/node_modules/@tiptap/extension-horizontal-rule/dist/index.js
+// node_modules/.pnpm/@tiptap+extension-horizontal-rule@2.5.0_@tiptap+core@2.5.0_@tiptap+pm@2.5.0__@tiptap+pm@2.5.0/node_modules/@tiptap/extension-horizontal-rule/dist/index.js
 var HorizontalRule = Node.create({
   name: "horizontalRule",
   addOptions() {
@@ -1555,10 +1554,20 @@ var HorizontalRule = Node.create({
   addCommands() {
     return {
       setHorizontalRule: () => ({ chain, state }) => {
-        const { $to: $originTo } = state.selection;
+        const { selection } = state;
+        const { $from: $originFrom, $to: $originTo } = selection;
         const currentChain = chain();
-        if ($originTo.parentOffset === 0) {
-          currentChain.insertContentAt(Math.max($originTo.pos - 2, 0), { type: this.name });
+        if ($originFrom.parentOffset === 0) {
+          currentChain.insertContentAt({
+            from: Math.max($originFrom.pos - 1, 0),
+            to: $originTo.pos
+          }, {
+            type: this.name
+          });
+        } else if (isNodeSelection(selection)) {
+          currentChain.insertContentAt($originTo.pos, {
+            type: this.name
+          });
         } else {
           currentChain.insertContent({ type: this.name });
         }
@@ -1599,7 +1608,7 @@ var HorizontalRule = Node.create({
   }
 });
 
-// node_modules/.pnpm/@tiptap+extension-italic@2.4.0_@tiptap+core@2.4.0_@tiptap+pm@2.4.0_/node_modules/@tiptap/extension-italic/dist/index.js
+// node_modules/.pnpm/@tiptap+extension-italic@2.5.0_@tiptap+core@2.5.0_@tiptap+pm@2.5.0_/node_modules/@tiptap/extension-italic/dist/index.js
 var starInputRegex2 = /(?:^|\s)(\*(?!\s+\*)((?:[^*]+))\*(?!\s+\*))$/;
 var starPasteRegex2 = /(?:^|\s)(\*(?!\s+\*)((?:[^*]+))\*(?!\s+\*))/g;
 var underscoreInputRegex2 = /(?:^|\s)(_(?!\s+_)((?:[^_]+))_(?!\s+_))$/;
@@ -1673,7 +1682,7 @@ var Italic = Mark.create({
   }
 });
 
-// node_modules/.pnpm/@tiptap+extension-list-item@2.4.0_@tiptap+core@2.4.0_@tiptap+pm@2.4.0_/node_modules/@tiptap/extension-list-item/dist/index.js
+// node_modules/.pnpm/@tiptap+extension-list-item@2.5.0_@tiptap+core@2.5.0_@tiptap+pm@2.5.0_/node_modules/@tiptap/extension-list-item/dist/index.js
 var ListItem2 = Node.create({
   name: "listItem",
   addOptions() {
@@ -1704,7 +1713,7 @@ var ListItem2 = Node.create({
   }
 });
 
-// node_modules/.pnpm/@tiptap+extension-ordered-list@2.4.0_@tiptap+core@2.4.0_@tiptap+pm@2.4.0_/node_modules/@tiptap/extension-ordered-list/dist/index.js
+// node_modules/.pnpm/@tiptap+extension-ordered-list@2.5.0_@tiptap+core@2.5.0_@tiptap+pm@2.5.0_/node_modules/@tiptap/extension-ordered-list/dist/index.js
 var ListItem3 = Node.create({
   name: "listItem",
   addOptions() {
@@ -1846,7 +1855,7 @@ var OrderedList = Node.create({
   }
 });
 
-// node_modules/.pnpm/@tiptap+extension-paragraph@2.4.0_@tiptap+core@2.4.0_@tiptap+pm@2.4.0_/node_modules/@tiptap/extension-paragraph/dist/index.js
+// node_modules/.pnpm/@tiptap+extension-paragraph@2.5.0_@tiptap+core@2.5.0_@tiptap+pm@2.5.0_/node_modules/@tiptap/extension-paragraph/dist/index.js
 var Paragraph = Node.create({
   name: "paragraph",
   priority: 1e3,
@@ -1879,7 +1888,7 @@ var Paragraph = Node.create({
   }
 });
 
-// node_modules/.pnpm/@tiptap+extension-strike@2.4.0_@tiptap+core@2.4.0_@tiptap+pm@2.4.0_/node_modules/@tiptap/extension-strike/dist/index.js
+// node_modules/.pnpm/@tiptap+extension-strike@2.5.0_@tiptap+core@2.5.0_@tiptap+pm@2.5.0_/node_modules/@tiptap/extension-strike/dist/index.js
 var inputRegex5 = /(?:^|\s)(~~(?!\s+~~)((?:[^~]+))~~(?!\s+~~))$/;
 var pasteRegex2 = /(?:^|\s)(~~(?!\s+~~)((?:[^~]+))~~(?!\s+~~))/g;
 var Strike = Mark.create({
@@ -1946,23 +1955,23 @@ var Strike = Mark.create({
   }
 });
 
-// node_modules/.pnpm/@tiptap+extension-text@2.4.0_@tiptap+core@2.4.0_@tiptap+pm@2.4.0_/node_modules/@tiptap/extension-text/dist/index.js
+// node_modules/.pnpm/@tiptap+extension-text@2.5.0_@tiptap+core@2.5.0_@tiptap+pm@2.5.0_/node_modules/@tiptap/extension-text/dist/index.js
 var Text = Node.create({
   name: "text",
   group: "inline"
 });
 
-// node_modules/.pnpm/@tiptap+starter-kit@2.4.0_@tiptap+pm@2.4.0/node_modules/@tiptap/starter-kit/dist/index.js
+// node_modules/.pnpm/@tiptap+starter-kit@2.5.0_@tiptap+pm@2.5.0/node_modules/@tiptap/starter-kit/dist/index.js
 var StarterKit = Extension.create({
   name: "starterKit",
   addExtensions() {
     var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t;
     const extensions = [];
-    if (this.options.blockquote !== false) {
-      extensions.push(Blockquote.configure((_a = this.options) === null || _a === void 0 ? void 0 : _a.blockquote));
-    }
     if (this.options.bold !== false) {
-      extensions.push(Bold.configure((_b = this.options) === null || _b === void 0 ? void 0 : _b.bold));
+      extensions.push(Bold.configure((_a = this.options) === null || _a === void 0 ? void 0 : _a.bold));
+    }
+    if (this.options.blockquote !== false) {
+      extensions.push(Blockquote.configure((_b = this.options) === null || _b === void 0 ? void 0 : _b.blockquote));
     }
     if (this.options.bulletList !== false) {
       extensions.push(BulletList.configure((_c = this.options) === null || _c === void 0 ? void 0 : _c.bulletList));

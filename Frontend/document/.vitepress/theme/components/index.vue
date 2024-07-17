@@ -1,93 +1,110 @@
-<template>
-    <div class="home">
-        <section class="hero">
-            <div>
-                <h1>{{ hero.name }}</h1>
-                <p>{{ hero.text }}</p>
-                <p>{{ hero.tagline }}</p>
-                <div class="actions">
-                    <a v-for="action in hero.actions" :key="action.link" :href="action.link" :class="action.theme">
-                        {{ action.text }}
-                    </a>
-                </div>
-            </div>
-            <img :src="hero.image.src" :alt="hero.image.alt" />
+<!-- <template>
+    <div>
 
-        </section>
-        <section class="features">
-            <div v-for="feature in features" :key="feature.title" class="feature">
-                <h2>{{ feature.title }}</h2>
-                <p>{{ feature.details }}</p>
-            </div>
-        </section>
     </div>
 </template>
-
 <script setup>
-import { ref } from 'vue';
+import { watch, ref } from 'vue'
+import axios from '../../utils/axios';  // 导入自定义的 axios 实例
+import { storeToRefs } from 'pinia';
+import { generateEnhancedFingerprint } from '../../utils/fingerprint.js'
+import { monitorstorage } from '../hooks/monitorLocalstorage.js';
+import { piniaUser } from '../../store/user.js';
+const store = piniaUser();
+monitorstorage(store);
+const { counter, data, accountnumber } = storeToRefs(store);
 
-const hero = ref({
-    name: '斑马在线剪贴板',
-    text: '免费文本、图片临时分享',
-    tagline: 'My great project tagline',
-    image: {
-        src: '/logo.png',
-        alt: '水獭托管'
+
+const users = ref([]);
+const fetchUsers = async () => {
+    try {
+        const response = await axios.get('/user');
+        users.value = response.data;
+        console.log(users.value);
+        users.value.forEach((item, index) => {
+            if (item.Browserid.user == accountnumber.value.Browserid.user) {
+                if (item.VerifiCodeTime == '' || isTimestampExpired(item.VerifiCodeTime) == true) {
+                    const currentTime = Math.floor(Date.now() / 1000);
+                    item.VerifiCodeTime = String(currentTime)
+                    item.VerifiCode = generateRandomCode()
+                    let ind = index + 1
+                    // console.log(ind);
+                    axios.put('/user/' + ind, item);
+                }
+            }
+        });
+    } catch (error) {
+        console.error("获取数据时出错：", error);
+    }
+};
+// fetchUsers()
+
+// 判断是否过期
+function isTimestampExpired(timestamp) {
+    // 获取当前时间的时间戳（秒级）
+    const currentTimestamp = Math.floor(Date.now() / 1000);
+
+    // 计算时间戳之间的差值（秒数）
+    const difference = currentTimestamp - timestamp;
+
+    // 定义过期时间阈值（5分钟，转换为秒数）
+    const expirationThreshold = 10 * 60;
+
+    console.log(difference);
+
+    // 判断差值是否大于过期时间阈值
+    return difference > expirationThreshold;
+}
+
+// 随机生成4位数验证码
+function generateRandomCode() {
+    // 生成一个 1000 到 9999 之间的随机整数
+    const code = Math.floor(Math.random() * (9999 - 1000 + 1)) + 1000;
+    return code.toString(); // 将数字转换为字符串返回
+}
+
+const userFingerprint = ref('');
+const fingerprint = (val) => {
+    // console.log(accountnumber.Browserid);
+    const getGenerateEnhanced = async () => {
+        try {
+            const fingerprint = await generateEnhancedFingerprint();
+            userFingerprint.value = fingerprint;
+            // console.log(userFingerprint.value, "hhhjjjj");
+
+        } catch (error) {
+            console.error('生成指纹时出错：', error);
+        }
+    }
+
+    if (val.Browserid.user == '' || val.Browserid.user == null || val.Browserid.user == undefined) {
+        getGenerateEnhanced()
+        // setTimeout(()=>{
+        fetchUsers()
+        // },1000)
+
+    } else {
+        // console.log("已经有了指纹了");
+        userFingerprint.value = val.Browserid.user;
+        // setTimeout(()=>{
+        fetchUsers()
+        // },1000)
+    }
+}
+fingerprint(accountnumber.value);
+
+const setAccountnumbers = () => {
+    store.setAccountnumber(userFingerprint.value);
+};
+watch(
+    () => userFingerprint.value,
+    () => {
+        setAccountnumbers();
     },
-    actions: [
-        { theme: 'brand', text: '免登录免费使用', link: '/docs/start/introduction' },
-        { theme: 'alt', text: '使用文档', link: '/docs/start/quick-start' }
-    ]
-});
+    { deep: true }
+);
 
-const features = ref([
-    { title: 'Feature A', details: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit' },
-    { title: 'Feature B', details: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit' },
-    { title: 'Feature C', details: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit' }
-]);
+
+
 </script>
-
-<style scoped>
-.home {
-    text-align: center;
-    padding: 2rem;
-}
-
-.hero {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.hero img {
-    width: 150px;
-    height: 150px;
-}
-
-.actions a {
-    margin: 0 10px;
-    padding: 10px 20px;
-    text-decoration: none;
-    border-radius: 5px;
-}
-
-.actions .brand {
-    background-color: #42b983;
-    color: #fff;
-}
-
-.actions .alt {
-    background-color: #35495e;
-    color: #fff;
-}
-
-.features {
-    display: flex;
-    justify-content: space-around;
-    padding: 2rem 0;
-}
-
-.feature {
-    max-width: 200px;
-}
-</style>
+<style scoped lang='scss'></style> -->

@@ -1,0 +1,73 @@
+{
+  "clipboard": [
+    {
+      "id": "1",
+      "userName": "236yefkeutruegfkwetr7tewr",
+      "data": {
+        "content": "ehfgsdhnwqgrfhsefw47trwtyefvdbfw47feyfvwetrdhfkwarytewfsyyt6rdgfjhhk65esxde"
+      }
+    }
+  ],
+  "user": [
+    {
+      "id": "cwgu3309",
+      "wechat": {
+        "user": ""
+      },
+      "Browserid": {
+        "user": "d93bf2cc5697158bb0c402517c0b6153ea7334a35783587082549049cdd6bd59"
+      },
+      "VerifiCode": "7665",
+      "VerifiCodeTime": "1721203538",
+      "create": 1721200343
+    },
+    {
+      "id": "dczg6165",
+      "wechat": {
+        "user": ""
+      },
+      "Browserid": {
+        "user": "36e9c402ff38a7fab8b70843678f4d1645552fffb2cfaf63f2e235c6d050e7eb"
+      },
+      "VerifiCode": "1744",
+      "VerifiCodeTime": "1721201817",
+      "create": 1721200866
+    },
+    {
+      "id": "xzmp5424",
+      "wechat": {
+        "user": ""
+      },
+      "Browserid": {
+        "user": ""
+      },
+      "VerifiCode": "7777",
+      "VerifiCodeTime": "1721201838",
+      "create": 1721201615
+    }
+  ],
+  "data": [
+    {
+      "id": "1",
+      "title": "哈哈哈",
+      "author": "作者A"
+    },
+    {
+      "id": "2",
+      "title": "第二篇文章",
+      "author": "戴夫"
+    }
+  ],
+  "posts": [
+    {
+      "id": "1",
+      "title": "第一篇文章",
+      "author": "作者A"
+    },
+    {
+      "id": "2",
+      "title": "第二篇文章",
+      "author": "作者B"
+    }
+  ]
+}

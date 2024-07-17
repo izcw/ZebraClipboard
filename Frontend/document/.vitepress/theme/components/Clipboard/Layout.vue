@@ -7,8 +7,14 @@
             </div><!-- 折叠工具栏 -->
 
             <div class="left">
-                <dir style="padding-bottom: 1rem;  display: flex;justify-content: space-between;align-items: center;">
+                <div style="padding-bottom: 1rem;  display: flex;justify-content: space-between;align-items: center;">
                     <div>
+                        <!-- <p>id{{fingerprint}}</p> -->
+                        <!-- {{ data }} -->
+                        用户唯一： {{ accountnumber.Browserid.user }}
+                        <hr>
+                        {{ counter }}
+                        <p @click="increment">点击{{ counter }}</p>
                         <el-button plain @click="addTab(editableTabsValue)" size="large"
                             style="background-color:var(--vp-c-bg-custom);color:var(--vp-c-text-1);border: 1px solid var(--vp-c-divider);">
                             <el-icon>
@@ -22,7 +28,7 @@
                     <el-text v-show="!ndstatus" class="mx-1 expire" style="color: var(--vp-c-text-1);"
                         @click="centerDialogVisible = true" size="small">
                         <span>3</span>天后过期</el-text>
-                </dir>
+                </div>
                 <el-tabs v-model="editableTabsValue" type="card" closable @tab-remove="tabremove()" class="demo-tabs"
                     @edit="handleTabsEdit">
                     <el-tab-pane v-for="item in editableTabs" :key="item.name" :label="item.title" :name="item.name">
@@ -40,16 +46,29 @@
                 <sidebarIndex></sidebarIndex>
             </el-dialog><!-- 分享模态框 -->
         </div>
-
         <FooterInfo></FooterInfo>
     </div>
 
 </template>
 
 <script setup>
-import { ref, provide, markRaw } from 'vue'
+import { ref, provide, markRaw, watch } from 'vue'
 import { ElMessageBox, ElMessage } from 'element-plus'
 import { Delete } from '@element-plus/icons-vue'
+
+// pinia
+import { storeToRefs } from 'pinia';
+import { monitorstorage } from '../../hooks/monitorLocalstorage.js';
+import { piniaUser } from '../../../store/user.js';
+const store = piniaUser();
+monitorstorage(store);
+const { counter, data, accountnumber } = storeToRefs(store);
+
+const increment = () => {
+    store.increment();
+};
+
+
 
 // 分享模态框
 const centerDialogVisible = ref(false);
@@ -162,7 +181,6 @@ let ndFolditup = () => {
     padding-top: 80px;
     margin-left: 15px;
     box-sizing: border-box;
-    background-color: var(--vp-c-bg-custom);
     transition: all ease 0.2s;
 }
 
