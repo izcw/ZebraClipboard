@@ -1,0 +1,75 @@
+{
+  "clipboard": [
+    {
+      "id": "1",
+      "userName": "236yefkeutruegfkwetr7tewr",
+      "data": {
+        "content": "ehfgsdhnwqgrfhsefw47trwtyefvdbfw47feyfvwetrdhfkwarytewfsyyt6rdgfjhhk65esxde"
+      }
+    }
+  ],
+  "user": [
+    {
+      "id": "vwrp8056",
+      "wechat": {
+        "user": ""
+      },
+      "Browserid": {
+        "user": "d93bf2cc5697158bb0c402517c0b6153ea7334a35783587082549049cdd6bd59"
+      },
+      "VerifiCode": "7888",
+      "VerifiCodeTime": "1721238358",
+      "create": "1721238358",
+      "limitationID": "1"
+    },
+    {
+      "id": "cela7626",
+      "wechat": {
+        "user": ""
+      },
+      "Browserid": {
+        "user": "9f743b9c24385b4327a2ccc5d7fd6846d07ac1fe56b185b0b17697e80f2dfd5f"
+      },
+      "VerifiCode": "4620",
+      "VerifiCodeTime": "1721239792",
+      "create": "1721239787",
+      "limitationID": "1"
+    },
+    {
+      "id": "apkb8834",
+      "wechat": {
+        "user": ""
+      },
+      "Browserid": {
+        "user": "2ba3e2618551ebd0ffb79a64cdcc0e2a49541a72a553d1fefa4d4bc86fbc2577"
+      },
+      "VerifiCode": "7322",
+      "VerifiCodeTime": "1721239798",
+      "create": "1721239798",
+      "limitationID": "1"
+    }
+  ],
+  "limitation": [
+    {
+      "id": "1",
+      "Name": "free",
+      "Numberofclipboards": 2,
+      "FileSize": "5120",
+      "NumberoFwords": "5000",
+      "Maximumrecyclingtime": "2592000",
+      "CustomDomainName": false
+    },
+    {
+      "id": "2",
+      "Name": "plus",
+      "Numberofclipboards": 10,
+      "FileSize": "102400",
+      "NumberoFwords": "10000",
+      "Maximumrecyclingtime": "7776000",
+      "CustomDomainName": true
+    }
+  ],
+  "historinfo":[
+
+  ]
+}

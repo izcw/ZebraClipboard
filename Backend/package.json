@@ -4,19 +4,22 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "app": "node app.js",
-    "json": "json-server data/db.json --port 4012",
-    "start": "concurrently \"node app.js\" \"pnpm json\""
+    "app": "node src/app.js",
+    "json": "json-server src/data/db.json --port 4012",
+    "dev": "concurrently \"pnpm app\" \"pnpm json\""
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.19.2",
+    "axios": "^1.7.2",
     "body-parser": "^1.20.2",
+    "express": "^4.19.2",
+    "json-server": "^1.0.0-beta.1",
+    "uuid": "^10.0.0",
     "wechat": "^2.1.0",
     "wechat-api": "^1.35.1",
-    "json-server": "^1.0.0-beta.1"
+    "ws": "^8.18.0"
   },
   "devDependencies": {
     "concurrently": "^8.2.2"

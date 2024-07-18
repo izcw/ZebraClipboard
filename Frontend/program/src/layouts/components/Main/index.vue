@@ -6,11 +6,13 @@
             </template>
         </ToptoolIndex>
         <RouterView />
+        <FooterIndex></FooterIndex>
     </div>
 </template>
 
 <script setup>
 import ToptoolIndex from '@/layouts/components/Toptool/index.vue';
+import FooterIndex from '@/layouts/components/Footer/index.vue';
 import { defineProps } from 'vue';
 
 const props = defineProps({

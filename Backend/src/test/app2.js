@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 const wechat = require('wechat');
 const WechatAPI = require('wechat-api');
 const fs = require('fs');
-const config = require('./config');
+const config = require('../config');
 
 const app = express();
 let api = null; // 初始化 api 实例对象为空

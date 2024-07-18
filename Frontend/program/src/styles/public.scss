@@ -43,3 +43,18 @@ hr {
     margin: 10px;
     cursor: pointer;
 }
+
+
+// 插槽more
+.more p,
+.more a {
+    font-size: 14px;
+}
+
+
+// 分页
+.paging{
+    display: flex;
+    justify-content: center;
+    padding:3rem 1rem 2rem 1rem;
+}

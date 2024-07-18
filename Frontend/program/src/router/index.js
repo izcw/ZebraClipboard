@@ -80,6 +80,28 @@ const router = createRouter({
       ]
     },
     {
+      path: '/chat',
+      name: 'chat',
+      component: Layout,
+      meta: {
+        title: "信息管理",
+        icon: 'face',
+      },
+      menuStatus:true,
+      role: ['admin', 'user'],
+      children: [
+        {
+          path: 'realinfo',
+          name: 'chatRealinfo',
+          component: () => import('@/views/chat/index.vue'),
+          meta: {
+            title: "实时信息",
+            icon: 'message-dots',
+          }
+        }
+      ]
+    },
+    {
       path: '/violation',
       name: 'violation',
       component: Layout,
