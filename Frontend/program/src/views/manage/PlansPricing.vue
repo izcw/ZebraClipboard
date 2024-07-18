@@ -1,5 +1,5 @@
 <template>
-    <div class="component layout-padding-large">
+    <div class="component-page component layout-padding-large">
         <div>
             <el-input v-model="searchfor" style="width: 240px" placeholder="请输入搜索内容..." clearable />
             <el-button type="primary">搜索</el-button>

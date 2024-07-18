@@ -61,6 +61,7 @@ const router = createRouter({
           path: 'annexfile',
           name: 'manageAnnexfile',
           component: () => import('@/views/manage/annexFile.vue'),
+          menuStatus: false,
           meta: {
             title: "附件管理",
             icon: 'file',
@@ -93,7 +94,7 @@ const router = createRouter({
           name: 'chatRealinfo',
           component: () => import('@/views/chat/index.vue'),
           meta: {
-            title: "实时信息",
+            title: "公众号信息",
             icon: 'message-dots',
           }
         }
@@ -107,7 +108,7 @@ const router = createRouter({
         title: "异常处理",
         icon: 'face',
       },
-      menuStatus: true,
+      menuStatus: false,
       role: ['admin', 'user'],
       children: [
         {

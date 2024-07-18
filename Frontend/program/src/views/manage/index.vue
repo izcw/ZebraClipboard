@@ -1,14 +1,13 @@
 <template>
-    <div class="component layout-padding-large">
+    <div class="component-page component layout-padding-large">
         <div>
             <el-input v-model="searchfor" style="width: 240px" placeholder="请输入搜索内容..." clearable />
-            <el-button type="primary">搜索</el-button>
             <br />
             <br />
             <br />
         </div>
 
-        <el-table :data="formattedUserData" style="width: 100%">
+        <el-table :data="filteredUserData" style="width: 100%">
             <el-table-column fixed="left" type="index" width="50" />
             <el-table-column fixed="left" prop="id" label="ID" width="100" />
             <el-table-column prop="role" label="角色" width="100">
@@ -36,30 +35,43 @@
             <el-table-column prop="createFormatted" label="账号创建时间" width="230" />
             <el-table-column fixed="right" label="操作" min-width="120">
                 <template #default="scope">
-                    <el-button link type="danger" size="small" @click="handleClick(scope.row.id)">
-                        删除
-                    </el-button>
-                    <el-button link type="primary" size="small">编辑</el-button>
+                    <el-popconfirm title="确定要删除吗?" @confirm="deleteData(scope.row.id)">
+                        <template #reference>
+                            <el-button link type="danger" size="small">
+                                删除
+                            </el-button>
+                        </template>
+                    </el-popconfirm>
+                    <el-button link type="primary" size="small" @click="editData(scope.row.id)">编辑</el-button>
                 </template>
             </el-table-column>
         </el-table>
+
+        <el-dialog v-model="centerDialogVisible" title="编辑" width="500" align-center fullscreen>
+            <span>Open the dialog from the center from the screen</span>
+            <template #footer>
+                <div class="dialog-footer">
+                    <el-button @click="centerDialogVisible = false">取消</el-button>
+                    <el-button type="primary" @click="editDataSave">
+                        保存
+                    </el-button>
+                </div>
+            </template>
+        </el-dialog><!-- 编辑模态框 -->
     </div>
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
-import { apiGetUser } from '@/api/user';
+import { ref, computed, watch } from 'vue';
+import { apiGetUser, apiDeleteUser } from '@/api/user';
 import { apiGetLimitation } from '@/api/limitation';
 import { formatTime } from '@/utils/formatTime.js';
 
 const searchfor = ref('');
-const handleClick = (id) => {
-    console.log('删除用户ID:', id);
-};
 
 // 获取用户数据
 const userData = ref([]);
-const getfetchUser = async () => {
+const getFetchUser = async () => {
     try {
         const response = await apiGetUser();
         userData.value = response;
@@ -68,11 +80,11 @@ const getfetchUser = async () => {
         console.error('获取不到数据:', error);
     }
 };
-getfetchUser();
+getFetchUser();
 
 // 获取套餐限制数据
-let limitationData = ref([]);
-const getGetLimitation = async () => {
+const limitationData = ref([]);
+const getFetchLimitation = async () => {
     try {
         const response = await apiGetLimitation();
         limitationData.value = response;
@@ -81,7 +93,7 @@ const getGetLimitation = async () => {
         console.error('获取不到数据:', error);
     }
 };
-getGetLimitation();
+getFetchLimitation();
 
 // 格式化用户数据
 const formattedUserData = computed(() => {
@@ -103,7 +115,39 @@ const limitationFind = (id) => {
     }
 };
 
-</script>
+// 过滤用户数据
+const filteredUserData = computed(() => {
+    if (searchfor.value) {
+        return formattedUserData.value.filter(user =>
+            user.id.toString().includes(searchfor.value)
+        );
+    } else {
+        return formattedUserData.value;
+    }
+});
 
+// 删除用户
+const deleteData = async (id) => {
+    try {
+        const response = await apiDeleteUser({ id });
+        console.log(response);
+        // 更新用户数据
+        getFetchUser();
+    } catch (error) {
+        console.error('删除数据失败:', error);
+    }
+};
+
+// 编辑
+const centerDialogVisible = ref(false)
+const editData = (id) => {
+    centerDialogVisible.value = true
+}
+
+const editDataSave = ()=>{
+    centerDialogVisible.value = false
+}
+
+</script>
 
 <style scoped lang='scss'></style>

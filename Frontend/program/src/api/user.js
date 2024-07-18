@@ -9,3 +9,12 @@ export function apiGetUser(params) {
     params
   });
 }
+
+
+// 删除用户数据
+export function apiDeleteUser(params) {
+  return request({
+    url: '/user/'+params.id,
+    method: 'delete'
+  });
+}

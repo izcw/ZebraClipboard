@@ -1,3 +1,9 @@
 .el-tabs__item{
     color: var(--text-color) !important;
 }
+.el-table,.el-table tr,.el-table th.el-table__cell{
+    background:var(--component-background) !important;
+    background-color:var(--component-background) !important;
+    color: var(--color-numeral-333) !important;
+}
+

@@ -28,6 +28,10 @@
     box-shadow: var(--component-box-shadow);
 }
 
+.component-page{
+    min-height: calc(100vh - 135px);
+}
+
 // hr线
 hr {
     margin: 20px 0;

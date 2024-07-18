@@ -17,7 +17,7 @@ setInterval(() => {
     user: "张" + i,
     content: "你好呀" + i,
   })
-}, 60000)
+}, 60000000)
 
 // 使用 body-parser 中间件解析请求体
 app.use(bodyParser.json());
@@ -36,7 +36,7 @@ app.use('/wechat', wechat(wechatConfig, (req, res, next) => {
   if (message.MsgType === 'event' && message.Event === 'subscribe') {
     // 用户关注事件
     console.log(`用户 ${message.FromUserName} 关注了公众号`);
-    res.reply('【斑马在线剪贴板】https://www.zebra.duoyu.link 欢迎关注！');
+    res.reply('hi！你好！我是张成威 学号：2331020120242\n 欢迎使用【斑马在线剪贴板】https://www.zebra.duoyu.link');
 
     sendmessageFun({
       identity: 'chat',

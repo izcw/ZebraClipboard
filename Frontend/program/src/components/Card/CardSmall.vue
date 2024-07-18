@@ -12,5 +12,9 @@
 <style scoped lang='scss'>
 .Card-box {
     width: 100%;
+
+    h5{
+        margin-bottom: 1rem;
+    }
 }
 </style>

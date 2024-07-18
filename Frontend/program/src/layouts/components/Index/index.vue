@@ -16,7 +16,12 @@
                     <el-col :span="12">
                         <CardSmall>
                             <template #title>
-                                组件title2
+                                扫码关注我的公众号
+                            </template>
+                            <template #contentbox>
+                                <img src="@/assets/image/wechat.png" style="width:100%;" alt="">
+                                <p style="font-size: 14px;line-height: 22px;color:var(--color-numeral-666);padding:10px 0;">关注公众号的目的（用于接收用户注册账号时发送验证码以及获取微信的唯一ID + 引流）</p>
+                                <p style="font-size: 14px;line-height: 22px;color:var(--color-numeral-666);">关注发送信息看看！！</p>
                             </template>
                         </CardSmall>
                     </el-col>
@@ -24,7 +29,7 @@
                 <br>
                 <CardIndex>
                     <template #title>
-                        实时信息
+                        公众号信息
                     </template>
                     <template #more>
                         <router-link :to="{ name: 'chatRealinfo' }">more+</router-link>
@@ -69,14 +74,6 @@
                     </template>
                     <template #contentbox>
                         <EchartsVisitorAnalysis></EchartsVisitorAnalysis>
-                    </template>
-                </CardIndex>
-                <CardIndex>
-                    <template #title>
-                        访客分析
-                    </template>
-                    <template #contentbox>
-                        <EchartsUsage></EchartsUsage>
                     </template>
                 </CardIndex>
             </el-col>
@@ -129,6 +126,7 @@ const load = () => {
         height: 100%;
         object-fit: cover;
         object-position: center;
+        
     }
 }
 

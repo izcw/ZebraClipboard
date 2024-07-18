@@ -1,6 +1,6 @@
 import request from '@/utils/request';
 
-// 获取用户数据
+// 获取admin用户数据
 export function apiGetAdmin(params) {
   return request({
     url: '/admin',

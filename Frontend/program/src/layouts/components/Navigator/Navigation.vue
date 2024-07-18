@@ -4,9 +4,8 @@
             <div v-if="item.menuStatus != false">
                 <hr>
                 <h5>{{ item.meta.title }}</h5>
-                <!-- <h5>{{ item.role }}</h5> -->
                 <router-link v-for="(item2, index2) in item.children" :key="index2" :to="{ name: item2.name }">
-                    <div class="item" :class="{ active: route.name == item2.name }">
+                    <div class="item" :class="{ active: route.name == item2.name }"  v-if="item2.menuStatus != false">
                         <div class="nav-icon">
                             <box-icon :name="item2.meta.icon"
                                 :color="route.name == item2.name ? 'var(--component-icon-color-reverse)' : 'var(--component-icon-color-default)'"></box-icon>
@@ -15,16 +14,15 @@
                     </div>
                 </router-link>
             </div>
-
         </div>
     </div>
 </template>
+
 <script setup>
 import { ref } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
+import 'boxicons';
 
-
-// 获取路由对象和当前路由对象
 const router = useRouter();
 const route = useRoute();
 
@@ -34,6 +32,7 @@ let RouteCurrent = route;
 console.log(RouteData, "8888");
 console.log(RouteCurrent, "当前", route.path);
 </script>
+
 <style scoped lang='scss'>
 .nav-box {
     margin-bottom: 30px;
@@ -81,7 +80,5 @@ console.log(RouteCurrent, "当前", route.path);
     .item:hover {
         background: #E7EBF6;
     }
-
-
 }
 </style>
