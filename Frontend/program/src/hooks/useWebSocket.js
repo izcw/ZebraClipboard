@@ -2,6 +2,7 @@ import { ref, onMounted, onBeforeUnmount } from 'vue';
 import { ElNotification } from 'element-plus';
 import { apiGetHistorinfo } from '@/api/historinfo.js';
 import { useRouter } from 'vue-router';
+import configuration from '@/utils/config.js';
 
 // 定义跳转函数
 let Jumprouter = (data, router) => {
@@ -36,7 +37,7 @@ export function useWebSocket() {
 
     // 建立 WebSocket 连接
     const setupWebSocket = () => {
-        socket = new WebSocket('ws://www.comm.duoyu.link');
+        socket = new WebSocket(configuration.urlport4011);
 
         socket.onopen = () => {
             connectionStatus.value = 'WebSocket 连接成功';

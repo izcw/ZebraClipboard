@@ -32,12 +32,7 @@
                 </el-tabs>
             </div>
             <div class="login-footer">
-                <div class="footer-inline">
-                    <p>Copyright © 2024 张成威</p>
-                    <p>&emsp;
-                        <a href="https://beian.miit.gov.cn/">桂公网安备 45098102000466号&emsp;桂ICP备2022009640号-2</a>
-                    </p>
-                </div>
+                <FooterIndex></FooterIndex>
             </div>
         </div>
     </div>
@@ -45,6 +40,7 @@
 <script setup>
 import { reactive, ref } from 'vue'
 import loginbox from './module/login.vue'
+import FooterIndex from '@/layouts/components/Footer/index.vue'
 import registerbox from './module/register.vue'
 import logoimg from '../../assets/image/logo.png'
 import { useThemeStore } from '@/stores/theme';
@@ -53,6 +49,10 @@ const activeName = ref('first')
 let logo = logoimg
 const url =
     'https://fuss10.elemecdn.com/a/3f/3302e58f9a181d2509f3dc0fa68b0jpeg.jpeg'
+
+let handleClick = ()=>{
+    
+}
 </script>
 <style scoped lang='scss'>
 .login-layout {
@@ -123,19 +123,11 @@ const url =
         z-index: 2;
 
         padding: 15px;
-        color: #888;
-        font-size: 12px;
 
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        text-align: center;
-
-        a {
-            color: inherit;
-            text-decoration: none;
-        }
     }
 }
 

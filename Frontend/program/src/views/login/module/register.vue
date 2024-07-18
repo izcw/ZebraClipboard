@@ -1,6 +1,6 @@
 <template>
     <div>
-        注册
+        敬请期待...
     </div>
 </template>
 <script setup>

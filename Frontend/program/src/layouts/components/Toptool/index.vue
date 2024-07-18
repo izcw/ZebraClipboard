@@ -12,14 +12,14 @@
                         color="var(--component-icon-color)" size="22px" @click="themeStore.toggleTheme"></box-icon>
                 </div>
                 <box-icon name='cog' class="boxicons-custom" color="var(--component-icon-color)" size="22px" @click="drawer = true"></box-icon>
-                <el-avatar class="boxicons-custom" :size="35" :src="toximg" />
+                <el-avatar class="boxicons-custom" @click="gohome" :size="35" :src="toximg" />
             </el-col>
         </el-row>
         <el-drawer v-model="drawer" :direction="rtl">
             <template #header>
               <h4>设置</h4>
             </template>
-            <el-link href="/login">退出登录</el-link>
+            <el-button @click="Logout">退出登录</el-button>
           </el-drawer>
     </div>
    
@@ -27,10 +27,22 @@
 <script setup>
 import tox from '@/assets/image/tou.png'
 import { ref } from 'vue';
+import router from '@/router/index.js';
 import { useThemeStore } from '@/stores/theme';
 const themeStore = useThemeStore();
 const toximg = ref(tox)
 
 const drawer = ref(false)
+
+
+// 退出登录
+let Logout = ()=>{
+    localStorage.removeItem("token")
+    router.replace('/login');
+}
+
+let gohome = ()=>{
+    router.replace('/about1');
+}
 </script>
 <style scoped lang='scss'></style>

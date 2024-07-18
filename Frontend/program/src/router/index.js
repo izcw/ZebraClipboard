@@ -2,8 +2,6 @@ import { watch } from 'vue';
 import { createRouter, createWebHistory } from 'vue-router';
 import Layout from '@/layouts/index.vue';
 
-
-
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -16,7 +14,7 @@ const router = createRouter({
         title: "仪表盘",
         icon: 'face',
       },
-      menuStatus:true,
+      menuStatus: true,
       role: ['admin', 'user'],
       children: [
         {
@@ -38,7 +36,7 @@ const router = createRouter({
         title: "管理",
         icon: 'face',
       },
-      menuStatus:true,
+      menuStatus: true,
       role: ['admin', 'user'],
       children: [
         {
@@ -87,7 +85,7 @@ const router = createRouter({
         title: "信息管理",
         icon: 'face',
       },
-      menuStatus:true,
+      menuStatus: true,
       role: ['admin', 'user'],
       children: [
         {
@@ -109,7 +107,7 @@ const router = createRouter({
         title: "异常处理",
         icon: 'face',
       },
-      menuStatus:true,
+      menuStatus: true,
       role: ['admin', 'user'],
       children: [
         {
@@ -140,13 +138,13 @@ const router = createRouter({
         title: "我的",
         icon: 'face',
       },
-      menuStatus:true,
+      menuStatus: true,
       role: ['admin', 'user'],
       children: [
         {
           path: '/about1',
           name: 'about1',
-          component: () => import('@/layouts/components/About/index.vue'),
+          component: () => import('@/views/about/index.vue'),
           meta: {
             title: "个人中心",
             icon: 'face',
@@ -161,7 +159,7 @@ const router = createRouter({
         title: "登录",
         icon: '',
       },
-      menuStatus:false,
+      menuStatus: false,
       role: [],
       component: () => import('../views/login/index.vue'),
     }
@@ -180,10 +178,16 @@ function updateTitle(newTitle) {
 
 // 路由守卫
 router.beforeEach((to, from, next) => {
-  if (to.meta.title) {
-    updateTitle(to.meta.title);
+  const token = localStorage.getItem('token'); // 从 localStorage 获取 token
+  if (!token && to.name !== 'login') {
+    // 如果没有 token 且前往的路由不是 login，则跳转到 login
+    next({ name: 'login' });
+  } else {
+    if (to.meta.title) {
+      updateTitle(to.meta.title);
+    }
+    next();
   }
-  next();
 });
 
 // 响应式地监听标题变化

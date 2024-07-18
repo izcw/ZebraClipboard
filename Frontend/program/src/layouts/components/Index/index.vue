@@ -6,7 +6,10 @@
                     <el-col :span="12">
                         <CardSmall>
                             <template #title>
-                                组件title
+                                我的信息
+                            </template>
+                            <template #contentbox>
+                                <Advertisement></Advertisement>
                             </template>
                         </CardSmall>
                     </el-col>
@@ -14,13 +17,6 @@
                         <CardSmall>
                             <template #title>
                                 组件title2
-                            </template>
-                        </CardSmall>
-                    </el-col>
-                    <el-col :span="12">
-                        <CardSmall>
-                            <template #title>
-                                组件title3
                             </template>
                         </CardSmall>
                     </el-col>
@@ -53,14 +49,6 @@
                             </li>
 
                         </ul>
-                    </template>
-                </CardIndex>
-                <CardIndex>
-                    <template #title>
-                        访客分析
-                    </template>
-                    <template #contentbox>
-                        <EchartsUsage></EchartsUsage>
                     </template>
                 </CardIndex>
             </el-col>
@@ -102,6 +90,7 @@ import CardIndex from "@/components/Card/index.vue";
 import CardSmall from "@/components/Card/CardSmall.vue";
 import EchartsVisitorAnalysis from "@/components/Echarts/VisitorAnalysis.vue";
 import EchartsUsage from "@/components/Echarts/Usage.vue";
+import Advertisement from '@/layouts/components/Navigator/Advertisement.vue';
 
 import { useWebSocket } from '@/hooks/useWebSocket';
 
