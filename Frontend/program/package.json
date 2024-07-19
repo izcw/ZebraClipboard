@@ -10,13 +10,17 @@
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.3.1",
+    "@tiptap/pm": "^2.5.4",
+    "@tiptap/starter-kit": "^2.5.4",
+    "@tiptap/vue-3": "^2.5.4",
     "axios": "^1.7.2",
     "boxicons": "^2.1.4",
     "element-plus": "^2.7.6",
     "pinia": "^2.1.7",
     "scss": "^0.2.4",
     "vue": "^3.4.21",
-    "vue-router": "^4.3.0"
+    "vue-router": "^4.3.0",
+    "vue3-uuid": "^1.0.0"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.0.4",

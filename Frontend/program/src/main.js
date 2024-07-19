@@ -6,6 +6,7 @@ import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 import 'boxicons';
+import UUID from "vue3-uuid";
 
 import { useThemeStore } from './stores/theme'; // 主题
 
@@ -21,6 +22,7 @@ for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
     app.component(key, component)
 }
 app.use(router)
+app.use(UUID)
 
 app.mount('#app')
 

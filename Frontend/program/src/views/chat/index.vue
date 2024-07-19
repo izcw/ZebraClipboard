@@ -1,8 +1,7 @@
 <template>
     <div class="component layout-padding-large">
         <div>
-            <el-input v-model="searchfor" style="width: 240px" placeholder="请输入搜索内容..." clearable />
-            <el-button type="primary">搜索</el-button>
+            <el-input v-model="searchfor" style="width: 240px" placeholder="请输入搜索内容..." clearable  disabled/>
             <br />
             <br />
             <br />
@@ -22,10 +21,9 @@
             <el-table-column prop="create" label="创建时间" width="230" sortable />
             <el-table-column fixed="right" label="操作" min-width="120">
                 <template #default="scope">
-                    <el-button link type="danger" size="small" @click="handleClick(scope.row.id)">
+                    <el-button link type="danger" size="small" @click="handleClick(scope.row.id)" disabled>
                         删除
                     </el-button>
-                    <el-button link type="primary" size="small">编辑</el-button>
                 </template>
             </el-table-column>
         </el-table>

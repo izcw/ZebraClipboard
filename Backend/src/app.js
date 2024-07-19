@@ -17,7 +17,7 @@ setInterval(() => {
     user: "张" + i,
     content: "你好呀" + i,
   })
-}, 60000000)
+}, 6 * 10000)
 
 // 使用 body-parser 中间件解析请求体
 app.use(bodyParser.json());
