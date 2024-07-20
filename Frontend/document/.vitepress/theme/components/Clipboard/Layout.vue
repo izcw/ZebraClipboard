@@ -213,7 +213,7 @@ let ndFolditup = () => {
 .nd-box {
     position: absolute;
     right: 0;
-    top: 54px;
+    top: 66px;
     width: 30px;
     height: 30px;
     padding: 6px;

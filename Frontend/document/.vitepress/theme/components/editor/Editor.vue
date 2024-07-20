@@ -47,7 +47,7 @@
   </div>
 </template>
 <script setup>
-import { ref, onBeforeUnmount, inject, onMounted } from 'vue'
+import { ref, onBeforeUnmount,watch, inject, onMounted } from 'vue'
 import { useEditor, EditorContent } from '@tiptap/vue-3'
 import StarterKit from '@tiptap/starter-kit'
 import Underline from '@tiptap/extension-underline'
@@ -59,14 +59,22 @@ function toggleDialog() {
   centerDialogVisible.value = !centerDialogVisible.value;
 }
 
+
 // 初始化编辑器
+let textContent = ref('<p>欢迎使用斑马在线剪贴板</p>')
 const editor = useEditor({
-  content: '<p>欢迎使用Tiptap编辑器。</p>',
+  content: textContent.value,
   extensions: [
     StarterKit,
     Underline,
     Heading.configure({ levels: [1, 2, 3] }),
   ],
+  onUpdate({ editor }) {
+    console.log("编辑了内容");
+    console.log("当前HTML内容：", editor.getHTML());
+    console.log("当前纯文本内容：", editor.getText());
+    textContent.value = editor.getHTML()
+  },
 })
 
 // 定义切换粗体的函数
