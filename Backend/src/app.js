@@ -6,18 +6,18 @@ const sendmessageFun = require('./router/SendMessage');
 const app = express();
 
 // 通过 WebSocket 通知前端
-let i = 0
-setInterval(() => {
-  console.log("发送了" + "你好" + i);
-  i++
+// let i = 0
+// setInterval(() => {
+//   console.log("发送了" + "你好" + i);
+//   i++
 
-  sendmessageFun({
-    identity: 'chat',
-    type: 'chat',
-    user: "张" + i,
-    content: "你好呀" + i,
-  })
-}, 6 * 10000)
+//   sendmessageFun({
+//     identity: 'chat',
+//     type: 'chat',
+//     user: "张" + i,
+//     content: "你好呀" + i,
+//   })
+// }, 50000)
 
 // 使用 body-parser 中间件解析请求体
 app.use(bodyParser.json());
@@ -28,6 +28,10 @@ const wechatConfig = {
   appid: config.appId,
   encodingAESKey: config.encodingAESKey
 };
+function isNumber(value) {
+  const regex = /^\d+$/;
+  return regex.test(value);
+}
 
 // 微信消息处理中间件
 app.use('/wechat', wechat(wechatConfig, (req, res, next) => {
@@ -36,46 +40,43 @@ app.use('/wechat', wechat(wechatConfig, (req, res, next) => {
   if (message.MsgType === 'event' && message.Event === 'subscribe') {
     // 用户关注事件
     console.log(`用户 ${message.FromUserName} 关注了公众号`);
-    res.reply('hi！你好！我是张成威 学号：2331020120242\n 欢迎使用【斑马在线剪贴板】https://www.zebra.duoyu.link');
+    res.reply('hi！你好！我是张成威\n学号：2331020120242\n欢迎使用【斑马在线剪贴板】https://www.zebra.duoyu.link\n请回复验证码以登录！');
 
-    sendmessageFun({
-      identity: 'chat',
-      type: 'wechat',
-      user: message.FromUserName,
-      content: "关注了公众号",
-    })
+    // sendmessageFun({
+    //   identity: 'chat',
+    //   type: 'wechat',
+    //   user: message.FromUserName,
+    //   content: "关注了公众号",
+    // })
 
   } else if (message.MsgType === 'event' && message.Event === 'SCAN') {
     // 用户已关注后扫描二维码事件
     console.log(`用户 ${message.FromUserName} 扫描了带参数二维码，参数为：${message.EventKey}`);
     res.reply('欢迎扫描带参数二维码！');
-
-    // 通过 WebSocket 通知前端
-    sendmessageFun({
-      identity: 'chat',
-      type: 'wechat',
-      user: message.FromUserName,
-      content: "扫描了带参数二维码",
-    })
   } else if (message.MsgType === 'text') {
     // 文本消息处理
     console.log(`用户 ${message.FromUserName} 发送了文本消息：${message.Content}`);
-    if (message.Content === '登录') {
-      res.reply('登录成功');
-      // 可以在这里处理登录成功后的其他逻辑
-    } else if (message.Content === '你好') {
-      res.reply('你好，欢迎使用！');
+
+    if (isNumber(message.Content)) {
+      // 通过 WebSocket 通知前端
+      sendmessageFun({
+        identity: 'chat',
+        type: 'wechat',
+        user: message.FromUserName,
+        content: message.Content
+      })
     } else {
-      res.reply('请问有什么帮助！');
+      if (message.Content === '登录') {
+        res.reply('登录成功');
+        // 可以在这里处理登录成功后的其他逻辑
+      } else if (message.Content === '你好') {
+        res.reply('你好，欢迎使用！');
+      } else {
+        res.reply('请问有什么帮助！');
+      }
     }
 
-    // 通过 WebSocket 通知前端
-    sendmessageFun({
-      identity: 'chat',
-      type: 'wechat',
-      user: message.FromUserName,
-      content: message.Content
-    })
+
   } else {
     // 其他消息类型，回复默认消息
     res.reply('欢迎使用！【斑马在线剪贴板】 https://www.zebra.duoyu.link/');

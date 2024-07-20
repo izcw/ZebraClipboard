@@ -44,7 +44,7 @@
                 <el-icon>
                     <Edit />
                 </el-icon>&nbsp;
-                <el-link href="/docs/user/index.html" style="color: var(--vp-c-text-1);">自定义域名</el-link>
+                <el-link href="/docs/user/index.html" style="color: var(--vp-c-text-1);" disabled>自定义域名（暂未实现）</el-link>
             </div>
         </div> <!-- 链接 -->
 

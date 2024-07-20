@@ -96,6 +96,7 @@ let handleClick = ()=>{
     }
 
     .login-box {
+        z-index: 99 !important;
         padding: 50px;
         background-color: var(--component-background);
         border: 2px solid rgba(255, 255, 255, .3);

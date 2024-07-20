@@ -21,6 +21,9 @@ import { reactive, ref } from 'vue'
 import { apiGetAdmin } from '@/api/admin';
 import { ElMessage } from 'element-plus'
 import router from '@/router/index.js';
+import { useTokenStore } from '@/stores/token';
+const tokenStore = useTokenStore();
+
 
 // 创建表单引用
 const ruleFormRef = ref(null);
@@ -58,7 +61,7 @@ const submitForm = async () => {
                         message: '登录成功',
                         type: 'success',
                     })
-                    localStorage.setItem("token", response.token)
+                    tokenStore.sessionStoragesetItem(response.token);
                     router.replace('/index');
                 } else {
                     ElMessage({

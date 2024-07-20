@@ -90,8 +90,6 @@ import EchartsUsage from "@/components/Echarts/Usage.vue";
 import Advertisement from '@/layouts/components/Navigator/Advertisement.vue';
 
 import { useWebSocket } from '@/hooks/useWebSocket';
-
-
 const { message, connectionStatus, historinfoData } = useWebSocket();
 
 const historinfoDataChange = ref(false);

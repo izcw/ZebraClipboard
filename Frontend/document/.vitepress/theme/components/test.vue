@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <div>
     <h1>Counter: {{ counter }}</h1>
     <button @click="increment">点击+++++</button>
@@ -19,4 +19,4 @@ const increment = () => {
   store.increment();
 };
 
-</script>
+</script> -->

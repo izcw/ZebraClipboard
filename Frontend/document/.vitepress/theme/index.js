@@ -1,8 +1,8 @@
 import { h } from 'vue'
 import { createPinia } from 'pinia';
-// import { createPersistPlugin } from '../utils/piniaPersistenceStorage.js'; // 引入持久化插件
 
-import { generateEnhancedFingerprint } from '../utils/fingerprint.js'
+import { generateEnhancedFingerprint } from '../utils/fingerprint.js';
+import { NewDataUser } from './hooks/newUser.js';
 
 import DefaultTheme from 'vitepress/theme'
 import ElementPlus from 'element-plus'
@@ -21,9 +21,35 @@ import Preview from './components/Clipboard/sidebar/Preview.vue'
 import Uploadfiles from './components/editor/Uploadfiles.vue'
 import UserIndex from './components/User/index.vue'
 import login from './components/User/login.vue'
-import tests from './components/test.vue'
+// import tests from './components/test.vue'
 
 import './style.css'
+
+
+// 浏览器指纹变量
+let fingeMark = '';
+const getGenerateEnhanced = async () => {
+  try {
+    // 检查localStorage中是否已存在指纹
+    const existingFingerprint = localStorage.getItem("fingeMark");
+
+    // 如果存在指纹，则不再生成新的指纹
+    if (existingFingerprint) {
+      fingeMark = existingFingerprint;
+      console.log("浏览器指纹（已存在）");
+    } else {
+      // 如果不存在指纹，则生成新的指纹
+      const fingerprint = await generateEnhancedFingerprint();
+      fingeMark = fingerprint;
+      console.log("浏览器指纹（新生成）");
+      localStorage.setItem("fingeMark", fingeMark);
+    }
+    NewDataUser()
+  } catch (error) {
+    console.error('生成指纹时出错：', error);
+  }
+};
+getGenerateEnhanced();
 
 const pinia = createPinia();
 // pinia.use(createPersistPlugin({ key: 'pinia' })); // 使用持久化插件
@@ -55,6 +81,7 @@ export default {
     app.component('Uploadfiles', Uploadfiles)
     app.component('UserIndex', UserIndex)
     app.component('login', login)
-    app.component('TestsIndex', tests)
+    // app.component('TestsIndex', tests)
+    // Fingerverificode()
   }
 }

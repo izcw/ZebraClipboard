@@ -279,3 +279,7 @@
 .el-overlay {
   background-color: rgb(0 0 0 / 70%);
 }
+
+.el-loading-mask {
+  background-color: var(--vp-c-bg);
+}

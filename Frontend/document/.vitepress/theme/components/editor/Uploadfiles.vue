@@ -2,15 +2,43 @@
     <div class="attachment">
         <el-text class="mx-1" type="warning">&ensp;<el-icon>
                 <Link />
-            </el-icon>&ensp;附件：</el-text>
+            </el-icon>&ensp;附件（暂未实现）：</el-text>
         <ul class="annex">
             <li>
-                <div class="operatingButton delete"><el-icon>
+                <div class="operatingButton delete">
+                    <el-icon>
                         <DeleteFilled />
-                    </el-icon></div>
-                <el-image :src="url" :zoom-rate="1.2" :max-scale="7" :min-scale="0.2" lazy hide-on-click-modal
+                    </el-icon>
+                </div>
+                <div class="filename">
+                    <p>panda.JPG</p>
+                </div>
+                <el-image :src="srcList[0]" :zoom-rate="1.2" :max-scale="7" :min-scale="0.2" lazy hide-on-click-modal
                     :preview-src-list="srcList" :initial-index="4" fit="cover" />
             </li>
+            <li>
+                <div class="operatingButton delete">
+                    <el-icon>
+                        <DeleteFilled />
+                    </el-icon>
+                </div>
+                <div class="filename">
+                    <p>2331020120242张成威-斑马在线剪贴板</p>
+                </div>
+                <el-image src="/images/icon/file.png" fit="contain" />
+            </li>
+            <li>
+                <div class="operatingButton delete">
+                    <el-icon>
+                        <DeleteFilled />
+                    </el-icon>
+                </div>
+                <div class="filename">
+                    <p>vue3.vue</p>
+                </div>
+                <el-image src="/images/icon/code.png" fit="contain" />
+            </li>
+
 
             <li><!-- 上传 -->
                 <el-upload action="#" list-type="picture-card" :auto-upload="false">
@@ -61,11 +89,8 @@
 
 </template>
 <script setup>
-let url = 'https://picserver.duoyu.link/picfile/image/202403/31-1711877887154.jpg';
 let srcList = [
-    'https://picserver.duoyu.link/picfile/image/202403/31-1711877887154.jpg',
-    'https://picserver.duoyu.link/picfile/image/202403/31-1711877871979.jpg',
-    'https://picserver.duoyu.link/picfile/image/202403/31-1711876570468.webp',
+    '/images/icon/panda.jpg',
 ]
 </script>
 <style scoped>
@@ -83,15 +108,17 @@ let srcList = [
 
 .annex li {
     width: 90px;
-    height: 65px;
+    height: 80px;
     list-style: none;
     margin: 0 10px 10px 0 !important;
     border-radius: 8px;
     overflow: hidden;
     position: relative;
+    padding-bottom: 28px;
 }
 
 .annex li .el-image {
+    background-color: var(--el-fill-color-lighter);
     width: 100% !important;
     height: 100% !important;
 }
@@ -123,5 +150,25 @@ let srcList = [
 
 .annex li .delete {
     bottom: 0;
+}
+
+
+.annex li .filename {
+    height: auto !important;
+    position: absolute;
+    left: 0;
+    bottom: 0px;
+    z-index: 99;
+
+}
+
+.annex li .filename p {
+    font-size: 12px;
+    padding: 0 2px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    white-space: nowrap;
+    margin: 0 !important;
 }
 </style>

@@ -11,7 +11,7 @@
                     <div>
                         <!-- <p>id{{fingerprint}}</p> -->
                         <!-- {{ data }} -->
-                        用户唯一： {{ accountnumber.Browserid.user }}
+                        <!-- 用户唯一： {{ accountnumber.Browserid.user }} -->
                         <hr>
                         {{ counter }}
                         <p @click="increment">点击{{ counter }}</p>
@@ -57,16 +57,16 @@ import { ElMessageBox, ElMessage } from 'element-plus'
 import { Delete } from '@element-plus/icons-vue'
 
 // pinia
-import { storeToRefs } from 'pinia';
-import { monitorstorage } from '../../hooks/monitorLocalstorage.js';
-import { piniaUser } from '../../../store/user.js';
-const store = piniaUser();
-monitorstorage(store);
-const { counter, data, accountnumber } = storeToRefs(store);
+// import { storeToRefs } from 'pinia';
+// import { monitorstorage } from '../../hooks/monitorLocalstorage.js';
+// import { piniaUser } from '../../../store/user.js';
+// const store = piniaUser();
+// monitorstorage(store);
+// const { counter, data, accountnumber } = storeToRefs(store);
 
-const increment = () => {
-    store.increment();
-};
+// const increment = () => {
+//     store.increment();
+// };
 
 
 

@@ -1,6 +1,7 @@
 import { watch } from 'vue';
 import { createRouter, createWebHistory } from 'vue-router';
 import Layout from '@/layouts/index.vue';
+import { useTokenStore } from '@/stores/token';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -179,7 +180,8 @@ function updateTitle(newTitle) {
 
 // 路由守卫
 router.beforeEach((to, from, next) => {
-  const token = localStorage.getItem('token'); // 从 localStorage 获取 token
+const tokenStore = useTokenStore();
+  const token = tokenStore.token;
   if (!token && to.name !== 'login') {
     // 如果没有 token 且前往的路由不是 login，则跳转到 login
     next({ name: 'login' });

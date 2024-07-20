@@ -19,13 +19,13 @@
             <el-table-column prop="type" label="类型" width="80" />
             <el-table-column prop="identity" label="身份" width="80" />
             <el-table-column prop="create" label="创建时间" width="230" sortable />
-            <el-table-column fixed="right" label="操作" min-width="120">
+            <!-- <el-table-column fixed="right" label="操作" min-width="120">
                 <template #default="scope">
                     <el-button link type="danger" size="small" @click="handleClick(scope.row.id)" disabled>
                         删除
                     </el-button>
                 </template>
-            </el-table-column>
+            </el-table-column> -->
         </el-table>
         <div class="paging">
             <el-pagination background layout="prev, pager, next" :page-size="pagesize" :current-page="currentpage"

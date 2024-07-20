@@ -1,4 +1,5 @@
 import { defineConfig } from 'vitepress'
+import configuration from './utils/config.js';
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
@@ -11,11 +12,12 @@ export default defineConfig({
     // https://vitepress.dev/reference/default-theme-config
     logo: "/favicon.ico",
     nav: [
-      { text: '首页', link: '/' },
+      { text: '首页', link: '/index' },
       { text: '剪贴板', link: '/clipboard' },
       { text: '查询剪贴板', link: '/query' },
-      { text: '捐赠', link: '/docs/about/Reward.md' },
+      // { text: '捐赠', link: '/docs/about/Reward.md' },
       // { text: '关于我们', link: '/docs/about/index' },
+      { text: '管理面板', link: configuration.admin },
       { text: '登录&nbsp;/&nbsp;注册', link: '/docs/user/login.md' },
     ],
 

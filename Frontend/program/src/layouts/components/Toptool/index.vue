@@ -35,7 +35,7 @@ const drawer = ref(false)
 
 // 退出登录
 let Logout = () => {
-    localStorage.removeItem("token")
+    sessionStorage.removeItem("token")
     router.replace('/login');
 }
 
