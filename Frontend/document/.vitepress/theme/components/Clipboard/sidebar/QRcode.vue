@@ -86,12 +86,12 @@ const sendData = () => {
 // const dataUser = inject('dataUser')
 
 const jiantebanData = inject('jiantebanData')
-console.log("为什么");
-console.log(jiantebanData.value);
+// console.log("为什么");
+// console.log(jiantebanData.value);
 
-onMounted(() => {
-    console.log('jiantebanData:', jiantebanData)
-})
+// onMounted(() => {
+//     console.log('jiantebanData:', jiantebanData)
+// })
 
 // 格式化数据
 const formattedUserData = computed(() => {

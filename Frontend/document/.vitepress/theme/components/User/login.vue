@@ -26,7 +26,7 @@
 <script setup>
 import { ref, onMounted, onBeforeUnmount } from 'vue';
 import axios from '../../../utils/axios';
-import { ElNotification,ElMessage } from 'element-plus';
+import { ElNotification, ElMessage } from 'element-plus';
 import configuration from '../../../utils/config.js';
 
 // 用户数据
@@ -49,16 +49,19 @@ let dataUserAll = ref()
 const getDataUser = async () => {
     const response = await axios.get('/user');
     dataUserAll.value = response.data
-    let fingeMark = localStorage.getItem('fingeMark')
+    let fingeMark = ''
+    if (typeof window !== 'undefined') {
+         fingeMark = localStorage.getItem('fingeMark')
+    }
     dataUser.value = response.data.find(item => item.Browserid.user === fingeMark);
-    console.log(dataUser.value);
+    // console.log(dataUser.value);
     RefreshVerificationCode()
 }
 getDataUser()
 
 // 检查是否需要更新验证码和时间
 let RefreshVerificationCode = async () => {
-    if (!dataUser.value.VerifiCodeTime || isTimestampExpired(dataUser.value.VerifiCodeTime)) {
+    if (dataUser?.value?.VerifiCodeTime && isTimestampExpired(dataUser.value.VerifiCodeTime)) {
         let currentTime = Math.floor(Date.now() / 1000);
         dataUser.value.VerifiCodeTime = String(currentTime);
         dataUser.value.VerifiCode = generateRandomCode();
@@ -72,6 +75,7 @@ const EXPIRATION_THRESHOLD = 10 * 60;
 function isTimestampExpired(timestamp) {
     const currentTimestamp = Math.floor(Date.now() / 1000); // 获取当前时间的时间戳（秒级）
     const difference = currentTimestamp - timestamp; // 计算时间戳之间的差值（秒数）
+    console.log(difference+"/"+EXPIRATION_THRESHOLD);
     return difference >= EXPIRATION_THRESHOLD; // 判断差值是否大于过期时间阈值
 }
 

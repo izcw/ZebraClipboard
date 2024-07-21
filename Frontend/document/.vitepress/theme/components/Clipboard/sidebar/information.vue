@@ -19,8 +19,7 @@ function reset() {
 </script>
 
 <style scoped>
-.commonblock {
-}
+.commonblock {}
 
 p {
     font-size: 14px;

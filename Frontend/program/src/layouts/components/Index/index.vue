@@ -29,7 +29,7 @@
                 <br>
                 <CardIndex>
                     <template #title>
-                        公众号信息
+                        公众号信息(接收“数字”信息)
                     </template>
                     <template #more>
                         <router-link :to="{ name: 'chatRealinfo' }">more+</router-link>

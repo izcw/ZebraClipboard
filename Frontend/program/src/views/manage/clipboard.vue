@@ -88,8 +88,8 @@ const searchfor = ref('');
 const filterclipboardData = computed(() => {
     if (searchfor.value) {
         const searchString = searchfor.value.toLowerCase();
-        return clipboardData.value.filter(user =>
-            user.userName.toString().toLowerCase().includes(searchString)
+        return clipboardData.value.filter(item =>
+            item.id.toString().toLowerCase().includes(searchString)
         );
     } else {
         return clipboardData.value;

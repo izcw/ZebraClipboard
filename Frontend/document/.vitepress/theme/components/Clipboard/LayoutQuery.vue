@@ -91,7 +91,7 @@ const copytext = (text) => {
         })
     }
     document.body.removeChild(textarea)
-    
+
     // 切换复制状态
     copystatus.value = true
     setTimeout(() => {
@@ -252,7 +252,7 @@ const copytext = (text) => {
 }
 
 
-.textView .textView:hover .copy-box {
+ .textView:hover .copy-box {
     opacity: 1;
 }
 </style>

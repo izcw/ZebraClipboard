@@ -13,7 +13,6 @@
             <div style="margin: 30px 0;">
                 <information></information>
             </div>
-           
         </div> -->
     </div>
 </template>

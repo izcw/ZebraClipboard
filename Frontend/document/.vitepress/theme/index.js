@@ -25,24 +25,28 @@ import login from './components/User/login.vue'
 
 import './style.css'
 
-
 // 浏览器指纹变量
 let fingeMark = '';
 const getGenerateEnhanced = async () => {
   try {
     // 检查localStorage中是否已存在指纹
-    const existingFingerprint = localStorage.getItem("fingeMark");
+    let existingFingerprint;
+    if (typeof window !== 'undefined') {
+      existingFingerprint = localStorage.getItem("fingeMark");
+    }
 
     // 如果存在指纹，则不再生成新的指纹
     if (existingFingerprint) {
       fingeMark = existingFingerprint;
-      console.log("浏览器指纹（已存在）");
+      console.log("浏览器指纹（已存在）:", fingeMark);
     } else {
       // 如果不存在指纹，则生成新的指纹
       const fingerprint = await generateEnhancedFingerprint();
       fingeMark = fingerprint;
-      console.log("浏览器指纹（新生成）");
-      localStorage.setItem("fingeMark", fingeMark);
+      console.log("浏览器指纹（新生成）:", fingeMark);
+      if (typeof window !== 'undefined') {
+        localStorage.setItem("fingeMark", fingeMark);
+      }
     }
     NewDataUser()
   } catch (error) {

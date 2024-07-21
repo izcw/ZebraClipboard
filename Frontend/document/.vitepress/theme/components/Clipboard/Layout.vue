@@ -16,10 +16,10 @@
                                 <DocumentAdd />
                             </el-icon>&ensp;新建文本文档
                         </el-button>&emsp; -->
-                        <el-text v-if="statussave" type="success" size="small">已于  {{ formatTimechangetime }}
+                        <el-text v-if="statussave" type="success" size="small">已于 {{ formatTimechangetime }}
                             保存成功</el-text>
                         <el-text v-else type="warning" size="small">未保存</el-text>
-                       
+
                     </div>
                     <!-- <el-text v-show="!ndstatus" class="mx-1 expire" style="color: var(--vp-c-text-1);"
                         @click="centerDialogVisible = true" size="small">
@@ -103,7 +103,10 @@ let clipboardData = ref({
 // 获取对应的用户
 const getDataUser = async () => {
     const response = await axios.get('/user');
-    let fingeMark = localStorage.getItem('fingeMark')
+    let fingeMark = ''
+    if (typeof window !== 'undefined') {
+         fingeMark = localStorage.getItem('fingeMark')
+    }
     dataUser.value = response.data.find(item => item.Browserid.user === fingeMark);
     getQuery(dataUser.value.id)
 
@@ -112,8 +115,8 @@ const getDataUser = async () => {
 
     // 如果没找到该用户的剪贴板就新建一个
     let findClipboard = responseClipboard.data.find(item => item.id == dataUser.value.id);
-    console.log("剪贴板");
-    console.log(findClipboard);
+    // console.log("剪贴板");
+    // console.log(findClipboard);
     let cTime = Math.floor(Date.now() / 1000);
     let dataarr = {
         id: dataUser.value.id,
@@ -147,12 +150,12 @@ let formatTimechangetime = ref()
 // 获取剪贴板数据
 const jiantebanData = ref();
 const getQuery = async (id) => {
-    console.log("??");
-    console.log(id);
+    // console.log("??");
+    // console.log(id);
     const responseClipboard = await axios.get('/clipboard/' + id);
     jiantebanData.value = responseClipboard.data;
-    console.log("dazui");
-    console.log(jiantebanData.value);
+    // console.log("dazui");
+    // console.log(jiantebanData.value);
     formatTimechangetime.value = formatTime(jiantebanData.value.changetime, 'YYYY年MM月DD日 hh时mm分ss秒')
 };
 provide('jiantebanData', jiantebanData);

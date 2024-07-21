@@ -65,7 +65,7 @@ const jiantebanData = inject('jiantebanData');
 // 监听数据变化
 if (jiantebanData) {
   watch(jiantebanData, (newValue, oldValue) => {
-    console.log('数据发生变化:', { newValue, oldValue });
+    // console.log('数据发生变化:', { newValue, oldValue });
     // 你可以在这里处理数据变化
     textareaContent.value = newValue.data[0].content
   });
@@ -78,7 +78,7 @@ let liminumber = ref(0)
 
 const emit = defineEmits(['update']);
 watch(textareaContent, (newValue, oldValue) => {
-  console.log('textareaContent数据发生变化:', { newValue, oldValue });
+  // console.log('textareaContent数据发生变化:', { newValue, oldValue });
   emit('update', false);
 });
 onMounted(()=>{
@@ -116,8 +116,8 @@ let passwd = ref('')
 
 // 保存
 let saveData =async (passwd) => {
-  console.log(passwd.value);
-  console.log("保存");
+  // console.log(passwd.value);
+  // console.log("保存");
   // 获取当前时间戳（秒）
   let cTime = Math.floor(Date.now() / 1000);
   // 获取 jiantebanData 的数据
@@ -131,7 +131,7 @@ let saveData =async (passwd) => {
   }
 
   emit('update', true);
-  console.log(data);
+  // console.log(data);
 
   await axios.put('/clipboard/' + data.id, data);
 };
@@ -147,9 +147,9 @@ const editor = useEditor({
     Heading.configure({ levels: [1, 2, 3] }),
   ],
   onUpdate({ editor }) {
-    console.log("编辑了内容");
-    console.log("当前HTML内容：", editor.getHTML());
-    console.log("当前纯文本内容：", editor.getText());
+    // console.log("编辑了内容");
+    // console.log("当前HTML内容：", editor.getHTML());
+    // console.log("当前纯文本内容：", editor.getText());
     textContent.value = editor.getHTML()
   },
 })

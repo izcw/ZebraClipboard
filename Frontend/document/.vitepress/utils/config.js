@@ -11,16 +11,16 @@
 
 const config = {
     // 服务器基本地址
-    // urlport4010: 'https://www.apizebra.duoyu.link',
-    // urlport4011: 'wss://www.comm.duoyu.link',
-    // urlport4012: 'https://apizebra.duoyu.link',
-    // admin: 'https://admin.zebra.duoyu.link',
+    urlport4010: 'https://www.apizebra.duoyu.link',
+    urlport4011: 'wss://www.comm.duoyu.link',
+    urlport4012: 'https://apizebra.duoyu.link',
+    admin: 'https://admin.zebra.duoyu.link',
 
     // 本地基本地址
-    urlport4010: 'http://127.0.0.1:4010',
-    urlport4011: 'wss://127.0.0.1:4011',
-    urlport4012: 'http://127.0.0.1:4012',
-    admin: 'http://localhost:4013/',
+    // urlport4010: 'http://127.0.0.1:4010',
+    // urlport4011: 'wss://127.0.0.1:4011',
+    // urlport4012: 'http://127.0.0.1:4012',
+    // admin: 'http://localhost:4013/',
 };
 
 export default config;

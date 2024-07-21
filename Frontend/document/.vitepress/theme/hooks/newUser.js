@@ -5,7 +5,10 @@ import { generateUniqueID } from '../../utils/generateUniqueID.js';
 export const NewDataUser = async () => {
     try {
         const response = await axios.get('/user');
-        let fingeMark = localStorage.getItem('fingeMark')
+        let fingeMark = ''
+        if (typeof window !== 'undefined') {
+             fingeMark = localStorage.getItem('fingeMark')
+          }
         let dataFilter = response.data.find(item => item.Browserid.user === fingeMark);
 
         // 如果没有就新建用户

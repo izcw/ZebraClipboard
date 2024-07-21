@@ -7,7 +7,8 @@
             <p>浏览器指纹： {{ dataUser.Browserid.user }}</p>
             <p v-if="dataUser.wechat.user != ''">微信ID： {{
                 dataUser.wechat.user }}</p>
-            <a v-else href="/docs/user/login.html"><el-alert title="未登录用户，点击跳转登录" type="warning" :closable="false" /></a>
+            <a v-else href="/docs/user/login.html"><el-alert title="未登录用户，点击跳转登录" type="warning"
+                    :closable="false" /></a>
             <br>
             <br>
             <a href="/clipboard.html"><el-button type="success">去使用在线剪贴板！GO！</el-button></a>
@@ -33,7 +34,10 @@ let dataUser = ref({
 const getDataUser = async () => {
     try {
         const response = await axios.get('/user');
-        let fingeMark = localStorage.getItem('fingeMark')
+        let fingeMark = ''
+        if (typeof window !== 'undefined') {
+             fingeMark = localStorage.getItem('fingeMark')
+        }
         dataUser.value = response.data.find(item => item.Browserid.user === fingeMark);
     } catch (error) {
         console.error("获取用户信息时出错:", error);
