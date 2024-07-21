@@ -1,5 +1,4 @@
 import { h } from 'vue'
-import { createPinia } from 'pinia';
 
 import { generateEnhancedFingerprint } from '../utils/fingerprint.js';
 import { NewDataUser } from './hooks/newUser.js';
@@ -55,8 +54,6 @@ const getGenerateEnhanced = async () => {
 };
 getGenerateEnhanced();
 
-const pinia = createPinia();
-// pinia.use(createPersistPlugin({ key: 'pinia' })); // 使用持久化插件
 
 /** @type {import('vitepress').Theme} */
 export default {
@@ -67,7 +64,6 @@ export default {
     })
   },
   enhanceApp({ app, router, siteData }) {
-    app.use(pinia);
     app.use(ElementPlus)
     for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
       app.component(key, component)

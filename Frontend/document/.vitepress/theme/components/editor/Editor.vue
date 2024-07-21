@@ -13,7 +13,7 @@
         <el-button @click="toggleBold">加粗</el-button>
         <el-button @click="toggleUnderline">下划线</el-button>
       </div> -->
-      <editor-content :editor="editor" v-show="FoxitEditor == 1" />
+      <!-- <editor-content :editor="editor" v-show="FoxitEditor == 1" /> -->
       <textarea v-show="FoxitEditor == '2'" ref="textareaRef" id="editor-textarea" name="editor-textarea" cols="80"
         rows="25" class="editor-textarea" v-model="textareaContent" @input="autoResize">
       </textarea>
@@ -52,10 +52,10 @@
 import { ref, onBeforeUnmount, watch, inject, onMounted, defineProps, provide, defineEmits } from 'vue'
 import { ElMessage } from 'element-plus'
 import axios from '../../../utils/axios';
-import { useEditor, EditorContent } from '@tiptap/vue-3'
-import StarterKit from '@tiptap/starter-kit'
-import Underline from '@tiptap/extension-underline'
-import Heading from '@tiptap/extension-heading'
+// import { useEditor, EditorContent } from '@tiptap/vue-3'
+// import StarterKit from '@tiptap/starter-kit'
+// import Underline from '@tiptap/extension-underline'
+// import Heading from '@tiptap/extension-heading'
 
 
 
@@ -137,50 +137,50 @@ let saveData =async (passwd) => {
 };
 
 
-// 初始化编辑器
-let textContent = ref('<p>欢迎使用斑马在线剪贴板</p>')
-const editor = useEditor({
-  content: textContent.value,
-  extensions: [
-    StarterKit,
-    Underline,
-    Heading.configure({ levels: [1, 2, 3] }),
-  ],
-  onUpdate({ editor }) {
-    // console.log("编辑了内容");
-    // console.log("当前HTML内容：", editor.getHTML());
-    // console.log("当前纯文本内容：", editor.getText());
-    textContent.value = editor.getHTML()
-  },
-})
+// // 初始化编辑器
+// let textContent = ref('<p>欢迎使用斑马在线剪贴板</p>')
+// const editor = useEditor({
+//   content: textContent.value,
+//   extensions: [
+//     StarterKit,
+//     Underline,
+//     Heading.configure({ levels: [1, 2, 3] }),
+//   ],
+//   onUpdate({ editor }) {
+//     // console.log("编辑了内容");
+//     // console.log("当前HTML内容：", editor.getHTML());
+//     // console.log("当前纯文本内容：", editor.getText());
+//     textContent.value = editor.getHTML()
+//   },
+// })
 
-// 定义切换粗体的函数
-const toggleBold = () => {
-  if (editor.value) {
-    editor.value.chain().focus().toggleBold().run()
-  }
-}
+// // 定义切换粗体的函数
+// const toggleBold = () => {
+//   if (editor.value) {
+//     editor.value.chain().focus().toggleBold().run()
+//   }
+// }
 
-// 定义切换下划线的函数
-const toggleUnderline = () => {
-  if (editor.value) {
-    editor.value.chain().focus().toggleUnderline().run()
-  }
-}
+// // 定义切换下划线的函数
+// const toggleUnderline = () => {
+//   if (editor.value) {
+//     editor.value.chain().focus().toggleUnderline().run()
+//   }
+// }
 
-// 定义设置标题的函数
-const Headingarr = [
-  { value: 1, label: "H1" },
-  { value: 2, label: "H2" },
-  { value: 3, label: "H3" }
-]
-let Headingsearch = ref(1)
-const setHeading = () => {
-  let level = Headingsearch.value;
-  if (editor.value) {
-    editor.value.chain().focus().toggleHeading({ level }).run()
-  }
-}
+// // 定义设置标题的函数
+// const Headingarr = [
+//   { value: 1, label: "H1" },
+//   { value: 2, label: "H2" },
+//   { value: 3, label: "H3" }
+// ]
+// let Headingsearch = ref(1)
+// const setHeading = () => {
+//   let level = Headingsearch.value;
+//   if (editor.value) {
+//     editor.value.chain().focus().toggleHeading({ level }).run()
+//   }
+// }
 
 // 切换编辑器类型
 const FoxitEditor = ref("2")
@@ -189,12 +189,12 @@ const optionsEditor = [
   { value: '2', label: '切换编辑器：纯文本' },
 ]
 
-// 组件卸载时销毁编辑器实例
-onBeforeUnmount(() => {
-  if (editor.value) {
-    editor.value.destroy()
-  }
-})
+// // 组件卸载时销毁编辑器实例
+// onBeforeUnmount(() => {
+//   if (editor.value) {
+//     editor.value.destroy()
+//   }
+// })
 
 
 // 定义要观察的对象

@@ -40,7 +40,7 @@ app.use('/wechat', wechat(wechatConfig, (req, res, next) => {
   if (message.MsgType === 'event' && message.Event === 'subscribe') {
     // 用户关注事件
     console.log(`用户 ${message.FromUserName} 关注了公众号`);
-    res.reply('hi！你好！我是张成威\n学号：2331020120242\n欢迎使用【斑马在线剪贴板】https://www.zebra.duoyu.link\n请回复验证码以登录！');
+    res.reply('hi！你好！我是张成威\n学号：2331020120242\n班级：计算机应用工程（专升本）2302\n欢迎使用【斑马在线剪贴板】https://www.zebra.duoyu.link\n请回复验证码以登录！');
 
     // sendmessageFun({
     //   identity: 'chat',
