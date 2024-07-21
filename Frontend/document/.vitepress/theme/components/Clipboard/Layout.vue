@@ -55,7 +55,7 @@ import { Delete } from '@element-plus/icons-vue'
 import axios from '../../../utils/axios';
 import { formatTime } from '../../../utils/formatTime.js'
 
-// 处理从子组件传递的数据
+// 处理从子组件传递的数据,保存状态
 let statussave = ref(true)
 const handleUpdate = (data) => {
     statussave.value = data;
