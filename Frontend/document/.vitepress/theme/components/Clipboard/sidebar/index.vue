@@ -2,18 +2,19 @@
     <div class="sidebar-box">
         <div class="Margins">
             <QRcode></QRcode>
-        </div>
-        <div class="info-box Margins">
-            <Preview></Preview>
-            <div style="margin: 30px 0;">
-                <information></information>
-            </div>
             <el-link href="/docs/report/ContentReport" type="danger" size="large" style="color:#f56c6c;">
                 <el-icon>
                     <WarnTriangleFilled />
                 </el-icon>非法内容举报（请不要上传敏感信息！）
             </el-link>
         </div>
+        <!-- <div class="info-box Margins">
+            <Preview></Preview>
+            <div style="margin: 30px 0;">
+                <information></information>
+            </div>
+           
+        </div> -->
     </div>
 </template>
 <script setup>

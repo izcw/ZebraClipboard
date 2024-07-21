@@ -1,8 +1,14 @@
 <template>
-    <textarea class="EditorTextarea"></textarea>
+    <textarea class="EditorTextarea" v-model="props.data.data[0].content"></textarea>
 </template>
 <script setup>
-
+import { inject, computed, defineProps, ref, watch } from 'vue';
+const props = defineProps({
+    data: {
+    type: Object, // 确保这里是 String
+    required: true
+  }
+});
 </script>
 <style lang='scss'>
 .EditorTextarea {

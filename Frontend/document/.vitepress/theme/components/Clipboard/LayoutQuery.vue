@@ -200,7 +200,7 @@ const copytext = (text) => {
 }
 
 /* 纯文本编辑器 */
-.editor-textarea {
+.textView .editor-textarea {
     width: 100%;
     box-shadow: inset 0 0 2px #c5c5c5;
     margin-bottom: 3rem !important;
@@ -219,7 +219,7 @@ const copytext = (text) => {
 
 
 /*copy按钮*/
-.copy-box {
+.textView .copy-box {
     opacity: 0;
     transition: all ease 0.5s;
     position: absolute;
@@ -236,23 +236,23 @@ const copytext = (text) => {
     user-select: none;
 }
 
-.copy-box:hover {
+.textView .copy-box:hover {
     border: 1px solid #444;
 }
 
 @media (max-width: 992px) {
-    .copy-box {
+    .textView .copy-box {
         opacity: 1;
     }
 }
 
-.copy-box img {
+.textView .copy-box img {
     width: 100%;
     height: 100%;
 }
 
 
-.textView:hover .copy-box {
+.textView .textView:hover .copy-box {
     opacity: 1;
 }
 </style>

@@ -2,10 +2,9 @@
     <div class="commonblock">
         <p>创建时间：<span>2024年6月18日 00点29分</span></p>
         <p>更新时间：<span>2024年6月18日 00点29分</span></p>
-        <p>上次查看：<span>2024年6月18日 00点29分</span></p>
+        <!-- <p>上次查看：<span>2024年6月18日 00点29分</span></p>
         <p><el-countdown @click="reset" title="过期删除时间" format="HH:mm:ss" :value="value1" /></p>
-        <p>查看次数：<span>1</span></p>
-
+        <p>查看次数：<span>1</span></p> -->
     </div>
 </template>
 

@@ -1,10 +1,9 @@
 <template>
   <div class="content-box">
-    <div class="copy-box" @click="copytext">
+    <div class="copy-box" @click="copytext(textareaContent)">
       <img v-show="!copystatus" src="/images/icon/copy.png" alt="">
       <img v-show="copystatus" src="/images/icon/answer.png" alt="">
     </div>
-
     <div style="box-shadow: inset 0 0 2px #c5c5c5;">
       <!-- <div class="tools" style="border-bottom: 1px dashed rgb(204, 204, 204);">
         <el-select style="width: 65px" v-model="Headingsearch" :placeholder="Headingsearch">
@@ -19,11 +18,11 @@
         rows="25" class="editor-textarea" v-model="textareaContent" @input="autoResize">
       </textarea>
     </div>
-    <Uploadfiles></Uploadfiles>
+    <Uploadfiles :liminumber="liminumber.toString()"></Uploadfiles>
     <el-affix position="bottom" :offset="0">
       <div class="SaveDelete">
         <div class="">
-          <el-select v-model="FoxitEditor" style="width: 160px;z-index: 30;" placeholder="请选择编辑器">
+          <el-select v-model="FoxitEditor" style="width: 160px;z-index: 30;" placeholder="请选择编辑器" disabled>
             <el-option v-for="item in optionsEditor" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
         </div>
@@ -33,13 +32,16 @@
               <DeleteFilled />
             </el-icon>&nbsp;删除
           </el-button>&nbsp; -->
-          <el-button type="warning" plain><el-icon>
+          <!-- <el-button type="warning" plain disabled><el-icon>
               <Download />
-            </el-icon>下载</el-button>&nbsp;
+            </el-icon>下载</el-button> -->
+          <el-button type="primary" @click="saveData">保存</el-button>
+          &nbsp;
           <el-button type="success" @click="toggleDialog()">
             <el-icon>
               <Promotion />
             </el-icon>&nbsp;分享
+
           </el-button>
         </div>
       </div>
@@ -47,17 +49,92 @@
   </div>
 </template>
 <script setup>
-import { ref, onBeforeUnmount,watch, inject, onMounted } from 'vue'
+import { ref, onBeforeUnmount, watch, inject, onMounted, defineProps, provide, defineEmits } from 'vue'
+import { ElMessage } from 'element-plus'
+import axios from '../../../utils/axios';
 import { useEditor, EditorContent } from '@tiptap/vue-3'
 import StarterKit from '@tiptap/starter-kit'
 import Underline from '@tiptap/extension-underline'
 import Heading from '@tiptap/extension-heading'
+
+
+
+const limitationData = inject('limitationData');
+const jiantebanData = inject('jiantebanData');
+
+// 监听数据变化
+if (jiantebanData) {
+  watch(jiantebanData, (newValue, oldValue) => {
+    console.log('数据发生变化:', { newValue, oldValue });
+    // 你可以在这里处理数据变化
+    textareaContent.value = newValue.data[0].content
+  });
+}
+
+
+// 文本框内容
+let textareaContent = ref()
+let liminumber = ref(0)
+
+const emit = defineEmits(['update']);
+watch(textareaContent, (newValue, oldValue) => {
+  console.log('textareaContent数据发生变化:', { newValue, oldValue });
+  emit('update', false);
+});
+onMounted(()=>{
+  setTimeout(()=>{
+    emit('update', true);
+  },500)
+})
+
+watch(textareaContent, (newVal) => {
+  // console.log(countCharacters(newVal) + "/" + limitationData.value.NumberoFwords);
+  liminumber.value = countCharacters(newVal)
+  if (liminumber.value > limitationData.value.NumberoFwords) {
+    textareaContent.value = textareaContent.value.slice(0, limitationData.value.NumberoFwords);
+    ElMessage({
+      message: '该套餐限制' + limitationData.value.NumberoFwords + '字.',
+      type: 'warning',
+    })
+  }
+});
+
+// 检测字数
+function countCharacters(str) {
+  const matches = str.match(/./gu); // 使用正则表达式匹配所有字符，包括多字节字符
+  return matches ? matches.length : 0;
+}
+
 
 const centerDialogVisible = inject('centerDialogVisible');
 
 function toggleDialog() {
   centerDialogVisible.value = !centerDialogVisible.value;
 }
+
+let passwd = ref('')
+
+// 保存
+let saveData =async (passwd) => {
+  console.log(passwd.value);
+  console.log("保存");
+  // 获取当前时间戳（秒）
+  let cTime = Math.floor(Date.now() / 1000);
+  // 获取 jiantebanData 的数据
+  let data = jiantebanData.value;
+  // 更新 content 和 changetime
+  data.data[0].content = textareaContent.value;
+  data.changetime = String(cTime);
+  // 判断 passwd 是否有值，如果有则赋值给 data.password
+  if (passwd.value) {
+    data.passwd = passwd.value;
+  }
+
+  emit('update', true);
+  console.log(data);
+
+  await axios.put('/clipboard/' + data.id, data);
+};
 
 
 // 初始化编辑器
@@ -106,10 +183,10 @@ const setHeading = () => {
 }
 
 // 切换编辑器类型
-const FoxitEditor = ref("1")
+const FoxitEditor = ref("2")
 const optionsEditor = [
   { value: '1', label: '富文本 和 Markdown' },
-  { value: '2', label: '纯文本' },
+  { value: '2', label: '切换编辑器：纯文本' },
 ]
 
 // 组件卸载时销毁编辑器实例
@@ -119,17 +196,15 @@ onBeforeUnmount(() => {
   }
 })
 
-// 复制功能
-let copystatus = ref(false)
-let copytext = () => {
-  copystatus.value = true
-  setTimeout(() => {
-    copystatus.value = false
-  }, 500)
-}
 
-// 文本框内容
-let textareaContent = ref("欢迎您！")
+// 定义要观察的对象
+// let textareaContent = ref(limitation);
+
+// // 使用 watch 来深度监听 message 的变化
+// watch(() => limitation.value, (newValue) => {
+//   console.log(newValue); // 输出当前内容
+//   console.log("改变了"); // 输出改变信息 
+// }, { deep: true }); // 启用深度监听
 
 // 自动调整文本框高度
 const autoResize = () => {
@@ -142,6 +217,37 @@ const autoResize = () => {
 onMounted(() => {
   autoResize()
 })
+
+
+
+// 复制文本到剪贴板
+const copystatus = ref(false)
+const copytext = (text) => {
+  // 创建一个临时 textarea
+  const textarea = document.createElement('textarea')
+  textarea.value = text
+  document.body.appendChild(textarea)
+  textarea.select()
+  try {
+    document.execCommand('copy')
+    ElMessage({
+      message: '复制成功',
+      type: 'success',
+    })
+  } catch (err) {
+    ElMessage({
+      message: '复制失败',
+      type: 'error',
+    })
+  }
+  document.body.removeChild(textarea)
+
+  // 切换复制状态
+  copystatus.value = true
+  setTimeout(() => {
+    copystatus.value = false
+  }, 500)
+}
 </script>
 
 
@@ -167,7 +273,7 @@ onMounted(() => {
   transition: all ease 0.5s;
   position: absolute;
   right: 13px;
-  top: 14px;
+  top: 55px;
   width: 34px;
   height: 34px;
   padding: 6px;
@@ -240,8 +346,8 @@ onMounted(() => {
 .editor-textarea {
   overflow-y: hidden;
   resize: none;
-  width: var(100% - 2px);
-  min-height: 800px !important;
+  width: 100% !important;
+  min-height: 500px !important;
   background-color: var(--vp-c-bg);
   padding: 0.5rem 1rem;
   line-height: 28px;

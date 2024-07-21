@@ -1,46 +1,43 @@
 <template>
     <div>
         <div class="box">
-            <div class="nd-box" @click="ndFolditup()">
+            <!-- <div class="nd-box" @click="ndFolditup()">
                 <img v-show="!ndstatus" src="/images/icon/nd-left.png" alt="">
                 <img v-show="ndstatus" src="/images/icon/nd-right.png" alt="">
-            </div><!-- 折叠工具栏 -->
+            </div> -->
+            <!-- 折叠工具栏 -->
 
             <div class="left">
                 <div style="padding-bottom: 1rem;  display: flex;justify-content: space-between;align-items: center;">
                     <div>
-                        <!-- <p>id{{fingerprint}}</p> -->
-                        <!-- {{ data }} -->
-                        <!-- 用户唯一： {{ accountnumber.Browserid.user }} -->
-                        <hr>
-                        {{ counter }}
-                        <p @click="increment">点击{{ counter }}</p>
-                        <el-button plain @click="addTab(editableTabsValue)" size="large"
+                        <!-- <el-button plain @click="addTab(editableTabsValue)" size="large"
                             style="background-color:var(--vp-c-bg-custom);color:var(--vp-c-text-1);border: 1px solid var(--vp-c-divider);">
                             <el-icon>
                                 <DocumentAdd />
                             </el-icon>&ensp;新建文本文档
-                        </el-button>&emsp;
-                        <el-text v-if="true" type="success" size="small">已于 02:57:33
+                        </el-button>&emsp; -->
+                        <el-text v-if="statussave" type="success" size="small">已于  {{ formatTimechangetime }}
                             保存成功</el-text>
-                        <el-text v-else type="warning" size="small">网络中断 本地存储中</el-text>
+                        <el-text v-else type="warning" size="small">未保存</el-text>
+                       
                     </div>
-                    <el-text v-show="!ndstatus" class="mx-1 expire" style="color: var(--vp-c-text-1);"
+                    <!-- <el-text v-show="!ndstatus" class="mx-1 expire" style="color: var(--vp-c-text-1);"
                         @click="centerDialogVisible = true" size="small">
-                        <span>3</span>天后过期</el-text>
+                        <span>3</span>天后过期</el-text> -->
                 </div>
-                <el-tabs v-model="editableTabsValue" type="card" closable @tab-remove="tabremove()" class="demo-tabs"
+                <!-- <el-tabs v-model="editableTabsValue" type="card" closable @tab-remove="tabremove()" class="demo-tabs"
                     @edit="handleTabsEdit">
                     <el-tab-pane v-for="item in editableTabs" :key="item.name" :label="item.title" :name="item.name">
-                        <Editor />
                     </el-tab-pane>
-                </el-tabs>
+                </el-tabs> -->
+                <Editor :jiantebanData="jiantebanData" @update="handleUpdate" />
             </div>
 
-            <div class="right" v-show="ndstatus">
+            <!-- <div class="right" v-show="ndstatus">
                 <QRcode></QRcode>
                 <information></information>
-            </div><!-- 工具栏 -->
+            </div> -->
+            <!-- 工具栏 -->
 
             <el-dialog v-model="centerDialogVisible" title="分享" align-center>
                 <sidebarIndex></sidebarIndex>
@@ -52,22 +49,113 @@
 </template>
 
 <script setup>
-import { ref, provide, markRaw, watch } from 'vue'
+import { ref, provide, markRaw, watch, computed } from 'vue'
 import { ElMessageBox, ElMessage } from 'element-plus'
 import { Delete } from '@element-plus/icons-vue'
+import axios from '../../../utils/axios';
+import { formatTime } from '../../../utils/formatTime.js'
 
-// pinia
-// import { storeToRefs } from 'pinia';
-// import { monitorstorage } from '../../hooks/monitorLocalstorage.js';
-// import { piniaUser } from '../../../store/user.js';
-// const store = piniaUser();
-// monitorstorage(store);
-// const { counter, data, accountnumber } = storeToRefs(store);
+// 处理从子组件传递的数据
+let statussave = ref(true)
+const handleUpdate = (data) => {
+    statussave.value = data;
+}
 
-// const increment = () => {
-//     store.increment();
-// };
 
+// 获取用户数据
+let dataUser = ref({
+    id: "",
+    wechat: {
+        user: ""
+    },
+    Browserid: {
+        user: ""
+    },
+    VerifiCode: "",
+    VerifiCodeTime: "",
+    create: "",
+    limitationID: "1"
+})
+setTimeout(() => {
+    dataUser.id = "9999"
+}, 5000)
+
+// 使用 provide 将 dataUser 提供给所有子组件
+provide('dataUser', dataUser)
+
+
+
+let clipboardData = ref({
+    id: "",
+    userName: "",
+    data: [
+        {
+            name: "",
+            content: "",
+            editorType: "",
+            passwd: ""
+        }
+    ],
+    create: "",
+    updatetime: "",
+})
+
+// 获取对应的用户
+const getDataUser = async () => {
+    const response = await axios.get('/user');
+    let fingeMark = localStorage.getItem('fingeMark')
+    dataUser.value = response.data.find(item => item.Browserid.user === fingeMark);
+    getQuery(dataUser.value.id)
+
+
+    const responseClipboard = await axios.get('/clipboard');
+
+    // 如果没找到该用户的剪贴板就新建一个
+    let findClipboard = responseClipboard.data.find(item => item.id == dataUser.value.id);
+    console.log("剪贴板");
+    console.log(findClipboard);
+    let cTime = Math.floor(Date.now() / 1000);
+    let dataarr = {
+        id: dataUser.value.id,
+        data: [
+            {
+                name: "文件一",
+                content: "欢迎使用斑马在线剪贴板..",
+                editorType: "text"
+            }
+        ],
+        passwd: "",
+        changetime: String(cTime),
+        create: String(cTime)
+    }
+    if (findClipboard == undefined) {
+        await axios.post('/clipboard', dataarr);
+    }
+}
+getDataUser()
+
+// 获取套餐数据
+let limitationData = ref();
+const getDataLimitation = async () => {
+    const response = await axios.get('/limitation');
+    limitationData.value = response.data.filter(item => item.typeID == dataUser.value.limitationID)[0]
+}
+getDataLimitation()
+provide('limitationData', limitationData) // 使用 provide 将 dataUser 提供给所有子组件
+
+let formatTimechangetime = ref()
+// 获取剪贴板数据
+const jiantebanData = ref();
+const getQuery = async (id) => {
+    console.log("??");
+    console.log(id);
+    const responseClipboard = await axios.get('/clipboard/' + id);
+    jiantebanData.value = responseClipboard.data;
+    console.log("dazui");
+    console.log(jiantebanData.value);
+    formatTimechangetime.value = formatTime(jiantebanData.value.changetime, 'YYYY年MM月DD日 hh时mm分ss秒')
+};
+provide('jiantebanData', jiantebanData);
 
 
 // 分享模态框
@@ -102,17 +190,29 @@ const addTab = (targetName) => {
     })
     editableTabsValue.value = newTabName
 }
-const tabremove = (el) => {
-    console.log("删除" + el);
-    ElMessageBox.confirm(
-        '确定删除吗？',
-        {
-            type: 'warning',
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
-            icon: markRaw(Delete),
+// 删除标签页
+const tabremove = async (targetName) => {
+    try {
+        await ElMessageBox.confirm(
+            '确定删除吗？',
+            {
+                type: 'warning',
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                icon: markRaw(Delete),
+            }
+        )
+        // 确认删除后的操作
+        const tabs = editableTabs.value
+        const activeName = editableTabsValue.value
+        editableTabs.value = tabs.filter((tab) => tab.name !== targetName)
+        if (activeName === targetName) {
+            const nextTab = editableTabs.value.find(tab => tab.name !== targetName)
+            editableTabsValue.value = nextTab ? nextTab.name : ''
         }
-    )
+    } catch (error) {
+        // 用户取消了删除操作，不做任何事情
+    }
 }
 
 const handleTabsEdit = (
@@ -150,9 +250,12 @@ const handleTabsEdit = (
 // 工具栏折叠
 let ndstatus = ref(false)
 let ndFolditup = () => {
-    console.log("dianji");
+    // console.log("dianji");
     ndstatus.value = !ndstatus.value
 }
+
+
+
 </script>
 
 <style scoped>

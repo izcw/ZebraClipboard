@@ -11,7 +11,7 @@
       "Name": "免费free",
       "Numberofclipboards": 2,
       "FileSize": "102400",
-      "NumberoFwords": "5000",
+      "NumberoFwords": "100",
       "Maximumrecyclingtime": "864000",
       "CustomDomainName": false
     },
@@ -19,47 +19,52 @@
       "id": "dfjl",
       "typeID": "2",
       "Name": "Plus",
-      "Numberofclipboards": 10,
+      "Numberofclipboards": "10",
       "FileSize": "1048576",
-      "NumberoFwords": "10000",
+      "NumberoFwords": "500",
       "Maximumrecyclingtime": "2592000",
       "CustomDomainName": true
     }
   ],
   "user": [
+    {
+      "id": "hdqy0167",
+      "wechat": {
+        "user": ""
+      },
+      "Browserid": {
+        "user": "d93bf2cc5697158bb0c402517c0b6153ea7334a35783587082549049cdd6bd59"
+      },
+      "VerifiCode": "3809",
+      "VerifiCodeTime": "1721542570",
+      "create": "1721542570",
+      "limitationID": "1"
+    }
   ],
   "clipboard": [
     {
-      "id": "3",
-      "userName": "236yefkeutruegfkwetr7tewr",
+      "id": "hdqy0167",
       "data": [
         {
           "name": "文件一",
-          "content": "sakjfh的说法更具黑色的跨世纪的国防科技的是v爱抚和劣势附件不能",
-          "editorType": "tiptap",
-          "password": "123"
+          "content": "欢迎使用斑马在线剪贴板..",
+          "editorType": "text"
         }
-      ]
-    },
-    {
-      "id": "3dsf",
-      "userName": "sadhbjh",
-      "data": [
-        {
-          "name": "文件一",
-          "content": "sakjfh的说法更具黑色的跨世纪的国防科技的是v爱抚和劣势附件不能",
-          "editorType": "text",
-          "password": ""
-        },
-        {
-          "name": "文件二",
-          "content": "sakjfh的说法更具黑色的跨世纪的国防科技的是v爱抚和劣势附件不能",
-          "editorType": "tiptap",
-          "password": ""
-        }
-      ]
+      ],
+      "passwd": "",
+      "changetime": "1721552971",
+      "create": "1721552971"
     }
   ],
   "historinfo": [
+    {
+      "id": "304c632e-cf47-4f1a-8170-84b4b2d9465b",
+      "identity": "chat",
+      "type": "wechat",
+      "user": "o98Ro5hfZng9TfvztVNZk41xLvGM",
+      "content": "1253",
+      "time": "1721493203.079",
+      "create": "2024-07-21 00:33:23"
+    }
   ]
 }

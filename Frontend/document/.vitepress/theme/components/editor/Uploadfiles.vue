@@ -38,10 +38,8 @@
                 </div>
                 <el-image src="/images/icon/code.png" fit="contain" />
             </li>
-
-
             <li><!-- 上传 -->
-                <el-upload action="#" list-type="picture-card" :auto-upload="false">
+                <el-upload action="#" list-type="picture-card" :auto-upload="false" disabled>
                     <el-icon>
                         <Plus />
                     </el-icon>
@@ -72,16 +70,16 @@
             <el-badge class="item" style="margin-top:10px;" type="warning" value="" :offset="[10, 5]">
                 <el-text size="small" style="color: var(--vp-c-text-1);">字数：
                     <span>
-                        34 / 1000
+                        {{letternumber}} / {{convertedData.NumberoFwords}}
                     </span>
                 </el-text>
             </el-badge>
             &emsp;
             <el-badge class="item" style="margin-top:10px;" type="warning" value="登录后享更大空间" :offset="[10, 5]">
-                <el-text size="small" style="color: var(--vp-c-text-1);">空间：
+                <el-text size="small" style="color: var(--el-color-info);"><del>附件空间：
                     <span>
-                        0.5M / 5M
-                    </span>
+                        0 / {{convertedData.FileSize}}
+                    </span></del>
                 </el-text>
             </el-badge>
         </div>
@@ -89,6 +87,36 @@
 
 </template>
 <script setup>
+import { inject, computed, defineProps, ref, watch } from 'vue';
+
+// 定义接收的 字数的变化
+const props = defineProps({
+    liminumber: {
+    type: String, // 确保这里是 String
+    required: true
+  }
+});
+
+const letternumber = ref(props.liminumber);
+// 监听 props.liminumber 的变化，并更新 letternumber
+watch(() => props.liminumber, (newVal) => {
+    letternumber.value = newVal;
+}, { immediate: true }); // immediate: true 表示在监听器初始化时立即执行一次回调函数
+
+
+// 注入
+const limitationData = inject('limitationData');
+const convertedData = computed(() => {
+  if (limitationData && limitationData.value) {
+    return {
+      ...limitationData.value,
+      FileSize: Math.floor(limitationData.value.FileSize / 1024) + ' MB' // FileSize 从字节转换为 MB
+    };
+  }
+  return {};
+});
+
+
 let srcList = [
     '/images/icon/panda.jpg',
 ]

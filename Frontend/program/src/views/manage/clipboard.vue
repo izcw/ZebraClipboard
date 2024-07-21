@@ -10,15 +10,17 @@
         <el-table :data="filterclipboardData" style="width: 100%">
             <el-table-column fixed="left" type="index" width="50" />
             <el-table-column fixed="left" prop="id" label="ID" width="100" />
-            <el-table-column prop="userName" label="用户" width="140" />
-            <el-table-column prop="" label="附件" width="140" />
-            <el-table-column prop="" label="大小" width="140" />
-            <el-table-column prop="data" label="文件" width="300">
+            <el-table-column prop="id" label="用户ID" width="140" />
+            <!-- <el-table-column prop="" label="附件" width="140" />
+            <el-table-column prop="" label="大小" width="140" /> -->
+            <el-table-column prop="data" label="剪贴板" width="300">
                 <template #default="scope">
                     <el-space wrap><el-tag v-for="item in scope.row.data" :key="item.label" type="info"
                             effect="plain">{{ item.name }}</el-tag></el-space>
                 </template>
             </el-table-column>
+            <el-table-column prop="changetime" label="修改时间" width="140" />
+            <el-table-column prop="create" label="创建时间" width="140" />
             <el-table-column fixed="right" label="操作" min-width="120">
                 <template #default="scope">
                     <el-popconfirm title="确定要删除吗?" @confirm="deleteData(scope.row.id)">
@@ -28,7 +30,7 @@
                             </el-button>
                         </template>
                     </el-popconfirm>
-                    <el-button link type="primary" size="small" @click="editData(scope.row.id)">编辑</el-button>
+                    <el-button link type="primary" size="small" @click="editData(scope.row.id)">审核</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -37,20 +39,17 @@
             fullscreen>
             <div style="padding:1rem;">
                 <el-form :model="formdata" label-width="auto" style="width: 100%;">
-                    <el-form-item label="用户">
-                        <el-input v-model="formdata.userName" prefix-icon="Coin" />
-                    </el-form-item>
-                    <el-form-item v-for="(item, index) in formdata.data" :key="index" :label="item.name">
-                        <EditorTextarea v-if="item.editorType == 'text'"></EditorTextarea>
-                        <EditorTiptap v-else></EditorTiptap>
+                    <el-form-item label="文件一">
+                        <EditorTextarea  :data="formdata" ></EditorTextarea>
+                        <!-- <EditorTiptap v-else></EditorTiptap> -->
                     </el-form-item>
                 </el-form>
             </div>
             <template #footer>
                 <div class="dialog-footer">
-                    <el-button @click="centerDialogVisible = false">取消</el-button>
-                    <el-button type="primary" v-if="addoredit == '1'" @click="editDataSave">保存</el-button>
-                    <el-button type="primary" v-else @click="addDataSave">添加</el-button>
+                    <el-button @click="centerDialogVisible = false" disabled>审核无异，通过</el-button>
+                    <el-button type="danger" v-if="addoredit == '1'" @click="editDataSave" disabled>包含非法内容，立即下架!</el-button>
+                    <el-button type="primary" v-else @click="addDataSave" disabled>添加</el-button>
                 </div>
             </template>
         </el-dialog><!-- 编辑模态框 -->
@@ -67,11 +66,7 @@ import { apiGetClipboard, apiDeleteClipboard, apiSaveClipboard } from '@/api/cli
 const centerDialogVisible = ref(false)
 const addoredit = ref("1")
 
-let formdata = ref({
-    id: "",
-    userName: "",
-    data: []
-})
+let formdata = ref()
 
 
 // 获取剪贴板数据
